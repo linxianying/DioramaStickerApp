@@ -4,73 +4,121 @@
       "id": "campfire_party",
       "folder": "campfire_party",
       "jsonFile": "level_campfire",
-      "emoji": "🏕️",
       "title_zh": "森林篝火晚会",
-      "subtitle_zh": "星空萤火与露营好友",
-      "accentHex": "#FFD86B"
+      "title_en": "Campfire Party",
+      "subtitle_zh": "星空帐篷与围炉夜话",
+      "emoji": "🏕️",
+      "accentHex": "#F59E0B"
     },
     {
       "id": "cat_cafe",
       "folder": "cat_cafe",
       "jsonFile": "level_cat_cafe",
-      "emoji": "🐱",
       "title_zh": "猫咖甜品店",
+      "title_en": "Cat Cafe Bakery",
       "subtitle_zh": "草莓蛋糕与软萌猫咪",
-      "accentHex": "#FF9EB5"
+      "emoji": "🐱",
+      "accentHex": "#F472B6"
     },
     {
       "id": "summer_market",
       "folder": "summer_market",
       "jsonFile": "level_summer_market",
-      "emoji": "🎆",
       "title_zh": "海边夏日夜市",
-      "subtitle_zh": "烟花海风与美食摊位",
-      "accentHex": "#6CE0FF"
+      "title_en": "Summer Night Market",
+      "subtitle_zh": "海浪烟花与章鱼烧摊",
+      "emoji": "🎆",
+      "accentHex": "#38BDF8"
     },
     {
       "id": "winter_cabin",
       "folder": "winter_cabin",
       "jsonFile": "level_winter_cabin",
-      "emoji": "🎄",
       "title_zh": "冬日圣诞小屋",
-      "subtitle_zh": "壁炉暖光与雪地派对",
-      "accentHex": "#FF8080"
+      "title_en": "Christmas Cabin",
+      "subtitle_zh": "壁炉雪松与驯鹿雪橇",
+      "emoji": "🎄",
+      "accentHex": "#EF4444"
     },
     {
       "id": "bagel_shop",
       "folder": "bagel_shop",
       "jsonFile": "level_bagel_shop",
-      "emoji": "🥯",
       "title_zh": "贝果铺货小店",
+      "title_en": "Artisan Bagel Shop",
       "subtitle_zh": "新鲜贝果补货与奶酪香",
-      "accentHex": "#FFB86C"
+      "emoji": "🥯",
+      "accentHex": "#FB923C"
     },
     {
       "id": "bakery_shop",
       "folder": "bakery_shop",
       "jsonFile": "level_bakery_shop",
-      "emoji": "🥐",
       "title_zh": "法式面包烘焙店",
+      "title_en": "French Boulangerie",
       "subtitle_zh": "窑炉欧包与酥脆可颂",
-      "accentHex": "#F5B971"
+      "emoji": "🥐",
+      "accentHex": "#D97706"
     },
     {
       "id": "toast_shop",
       "folder": "toast_shop",
       "jsonFile": "level_toast_shop",
-      "emoji": "🍞",
       "title_zh": "吐司面包屋",
+      "title_en": "Artisan Toast Shop",
       "subtitle_zh": "厚切生吐司与蜂蜜黄油",
-      "accentHex": "#FFE07D"
+      "emoji": "🍞",
+      "accentHex": "#EAB308"
     },
     {
       "id": "sewing_shop",
       "folder": "sewing_shop",
       "jsonFile": "level_sewing_shop",
-      "emoji": "🧵",
       "title_zh": "治愈缝纫小店",
+      "title_en": "Cozy Sewing Studio",
       "subtitle_zh": "复古缝纫机与布艺手作",
-      "accentHex": "#C8A6FF"
+      "emoji": "🧵",
+      "accentHex": "#A855F7"
+    },
+    {
+      "id": "christmas_forest",
+      "folder": "christmas_forest",
+      "jsonFile": "level_christmas_forest",
+      "title_zh": "冬季圣诞森林",
+      "title_en": "Winter Christmas Forest",
+      "subtitle_zh": "极光森林与驯鹿雪橇",
+      "emoji": "❄️",
+      "accentHex": "#60A5FA"
+    },
+    {
+      "id": "desert_camp",
+      "folder": "desert_camp",
+      "jsonFile": "level_desert_camp",
+      "title_zh": "沙漠帐篷探险",
+      "title_en": "Desert Oasis Expedition",
+      "subtitle_zh": "绿洲星夜与波西米亚帐篷",
+      "emoji": "🐪",
+      "accentHex": "#F97316"
+    },
+    {
+      "id": "hotpot_feast",
+      "folder": "hotpot_feast",
+      "jsonFile": "level_hotpot_feast",
+      "title_zh": "火锅食材盛宴",
+      "title_en": "Overhead Hotpot Feast",
+      "subtitle_zh": "天花板俯视角鸳鸯火锅",
+      "emoji": "🍲",
+      "accentHex": "#DC2626"
+    },
+    {
+      "id": "taiwan_night_market",
+      "folder": "taiwan_night_market",
+      "jsonFile": "level_taiwan_night_market",
+      "title_zh": "台湾夜市街",
+      "title_en": "Taiwan Night Market",
+      "subtitle_zh": "珍珠奶茶、盐酥鸡与套圈圈",
+      "emoji": "🏮",
+      "accentHex": "#E11D48"
     }
   ]
 }

@@ -19,6 +19,7 @@ assets_pipeline/extracted/
 assets_pipeline/extracted_*/
 assets_pipeline/rebuilt_*/
 assets_pipeline/audit_*.png
+assets_pipeline/empty_bg_*.png
 assets_pipeline/grid_*.png
 assets_pipeline/diff_*.png
 assets_pipeline/blend_*.png
