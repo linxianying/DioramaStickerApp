@@ -59,6 +59,26 @@
       "stickerCount": 16,
       "thumb": "levels/bakery_shop/thumb.webp",
       "dataUrl": "levels/bakery_shop/level.json"
+    },
+    {
+      "id": "toast_shop",
+      "emoji": "🍞",
+      "title_zh": "吐司面包屋",
+      "subtitle_zh": "厚切生吐司与蜂蜜黄油",
+      "accentHex": "#FFE07D",
+      "stickerCount": 14,
+      "thumb": "levels/toast_shop/thumb.webp",
+      "dataUrl": "levels/toast_shop/level.json"
+    },
+    {
+      "id": "sewing_shop",
+      "emoji": "🧵",
+      "title_zh": "治愈缝纫小店",
+      "subtitle_zh": "复古缝纫机与布艺手作",
+      "accentHex": "#C8A6FF",
+      "stickerCount": 16,
+      "thumb": "levels/sewing_shop/thumb.webp",
+      "dataUrl": "levels/sewing_shop/level.json"
     }
   ]
 }

@@ -53,6 +53,24 @@
       "title_zh": "法式面包烘焙店",
       "subtitle_zh": "窑炉欧包与酥脆可颂",
       "accentHex": "#F5B971"
+    },
+    {
+      "id": "toast_shop",
+      "folder": "toast_shop",
+      "jsonFile": "level_toast_shop",
+      "emoji": "🍞",
+      "title_zh": "吐司面包屋",
+      "subtitle_zh": "厚切生吐司与蜂蜜黄油",
+      "accentHex": "#FFE07D"
+    },
+    {
+      "id": "sewing_shop",
+      "folder": "sewing_shop",
+      "jsonFile": "level_sewing_shop",
+      "emoji": "🧵",
+      "title_zh": "治愈缝纫小店",
+      "subtitle_zh": "复古缝纫机与布艺手作",
+      "accentHex": "#C8A6FF"
     }
   ]
 }

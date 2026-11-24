@@ -22,7 +22,9 @@ final class LevelLoader {
             LevelManifestItem(id: "summer_market", folder: "summer_market", jsonFile: "level_summer_market", emoji: "🎆", titleZh: "海边夏日夜市", subtitleZh: "烟花海风与美食摊位", accentHex: "#6CE0FF"),
             LevelManifestItem(id: "winter_cabin", folder: "winter_cabin", jsonFile: "level_winter_cabin", emoji: "🎄", titleZh: "冬日圣诞小屋", subtitleZh: "壁炉暖光与雪地派对", accentHex: "#FF8080"),
             LevelManifestItem(id: "bagel_shop", folder: "bagel_shop", jsonFile: "level_bagel_shop", emoji: "🥯", titleZh: "贝果铺货小店", subtitleZh: "新鲜贝果补货与奶酪香", accentHex: "#FFB86C"),
-            LevelManifestItem(id: "bakery_shop", folder: "bakery_shop", jsonFile: "level_bakery_shop", emoji: "🥐", titleZh: "法式面包烘焙店", subtitleZh: "窑炉欧包与酥脆可颂", accentHex: "#F5B971")
+            LevelManifestItem(id: "bakery_shop", folder: "bakery_shop", jsonFile: "level_bakery_shop", emoji: "🥐", titleZh: "法式面包烘焙店", subtitleZh: "窑炉欧包与酥脆可颂", accentHex: "#F5B971"),
+            LevelManifestItem(id: "toast_shop", folder: "toast_shop", jsonFile: "level_toast_shop", emoji: "🍞", titleZh: "吐司面包屋", subtitleZh: "厚切生吐司与蜂蜜黄油", accentHex: "#FFE07D"),
+            LevelManifestItem(id: "sewing_shop", folder: "sewing_shop", jsonFile: "level_sewing_shop", emoji: "🧵", titleZh: "治愈缝纫小店", subtitleZh: "复古缝纫机与布艺手作", accentHex: "#C8A6FF")
         ]
     }
 
