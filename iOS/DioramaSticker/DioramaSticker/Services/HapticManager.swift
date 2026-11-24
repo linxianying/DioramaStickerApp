@@ -3,6 +3,8 @@ import UIKit
 final class HapticManager {
     static let shared = HapticManager()
 
+    var isEnabled: Bool = true
+
     private let lightImpact = UIImpactFeedbackGenerator(style: .light)
     private let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
     private let softImpact = UIImpactFeedbackGenerator(style: .soft)
@@ -21,28 +23,28 @@ final class HapticManager {
         selection.prepare()
     }
 
-    /// Subtle paper peel feel when picking up a sticker from the tray
     func stickerPickup() {
+        guard isEnabled else { return }
         lightImpact.impactOccurred(intensity: 0.7)
     }
 
-    /// Gentle tick when dragging into the magnetic snap zone
     func magneticEnter() {
+        guard isEnabled else { return }
         selection.selectionChanged()
     }
 
-    /// Juicy tactile snap when sticker locks into place
     func stickerSnap() {
+        guard isEnabled else { return }
         mediumImpact.impactOccurred(intensity: 0.9)
     }
 
-    /// Soft bounce when sticker returns to tray (miss)
     func stickerReturn() {
+        guard isEnabled else { return }
         softImpact.impactOccurred(intensity: 0.5)
     }
 
-    /// Celebration haptic on level completion
     func levelComplete() {
+        guard isEnabled else { return }
         notification.notificationOccurred(.success)
     }
 }

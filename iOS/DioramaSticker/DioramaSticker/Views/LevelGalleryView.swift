@@ -3,6 +3,7 @@ import SwiftUI
 struct LevelGalleryView: View {
     @ObservedObject var viewModel: DioramaGameViewModel
     @State private var activeLevelItem: LevelManifestItem? = nil
+    @State private var showSettings = false
 
     private let columns = [
         GridItem(.flexible(), spacing: 14),
@@ -52,17 +53,22 @@ struct LevelGalleryView: View {
                 MainGameView(viewModel: viewModel)
                     .navigationBarBackButtonHidden(true)
             }
+            .sheet(isPresented: $showSettings) {
+                SettingsSheetView(viewModel: viewModel)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
         }
     }
 
     private var headerSection: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("微缩造景贴纸屋")
-                    .font(.system(size: 26, weight: .heavy, design: .rounded))
+                    .font(.system(size: 25, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
                 Text("挑一个治愈小世界，把贴纸一个个贴回原位 ✨")
-                    .font(.system(size: 13.5, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.white.opacity(0.72))
             }
             Spacer()
@@ -70,19 +76,35 @@ struct LevelGalleryView: View {
             let totalAll = viewModel.manifest.reduce(0) { $0 + viewModel.totalStickerCount(for: $1) }
             VStack(spacing: 2) {
                 Text("\(totalDone)/\(totalAll)")
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .font(.system(size: 13, weight: .bold, design: .monospaced))
                     .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.42))
                 Text("已收集")
-                    .font(.system(size: 10.5))
+                    .font(.system(size: 10))
                     .foregroundStyle(.white.opacity(0.65))
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 7)
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Color.white.opacity(0.09))
-                    .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Color.white.opacity(0.14), lineWidth: 1))
+                    .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Color.white.opacity(0.14), lineWidth: 1))
             )
+
+            Button {
+                HapticManager.shared.magneticEnter()
+                showSettings = true
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        Circle()
+                            .fill(Color.white.opacity(0.11))
+                            .overlay(Circle().strokeBorder(Color.white.opacity(0.16), lineWidth: 1))
+                    )
+            }
+            .buttonStyle(.plain)
         }
     }
 

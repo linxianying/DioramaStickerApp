@@ -1,0 +1,64 @@
+{
+  "levels": [
+    {
+      "id": "campfire_party",
+      "emoji": "🏕️",
+      "title_zh": "森林篝火晚会",
+      "subtitle_zh": "星空萤火与露营好友",
+      "accentHex": "#FFD86B",
+      "stickerCount": 30,
+      "thumb": "levels/campfire_party/thumb.webp",
+      "dataUrl": "levels/campfire_party/level.json"
+    },
+    {
+      "id": "cat_cafe",
+      "emoji": "🐱",
+      "title_zh": "猫咖甜品店",
+      "subtitle_zh": "草莓蛋糕与软萌猫咪",
+      "accentHex": "#FF9EB5",
+      "stickerCount": 16,
+      "thumb": "levels/cat_cafe/thumb.webp",
+      "dataUrl": "levels/cat_cafe/level.json"
+    },
+    {
+      "id": "summer_market",
+      "emoji": "🎆",
+      "title_zh": "海边夏日夜市",
+      "subtitle_zh": "烟花海风与美食摊位",
+      "accentHex": "#6CE0FF",
+      "stickerCount": 22,
+      "thumb": "levels/summer_market/thumb.webp",
+      "dataUrl": "levels/summer_market/level.json"
+    },
+    {
+      "id": "winter_cabin",
+      "emoji": "🎄",
+      "title_zh": "冬日圣诞小屋",
+      "subtitle_zh": "壁炉暖光与雪地派对",
+      "accentHex": "#FF8080",
+      "stickerCount": 21,
+      "thumb": "levels/winter_cabin/thumb.webp",
+      "dataUrl": "levels/winter_cabin/level.json"
+    },
+    {
+      "id": "bagel_shop",
+      "emoji": "🥯",
+      "title_zh": "贝果铺货小店",
+      "subtitle_zh": "新鲜贝果补货与奶酪香",
+      "accentHex": "#FFB86C",
+      "stickerCount": 16,
+      "thumb": "levels/bagel_shop/thumb.webp",
+      "dataUrl": "levels/bagel_shop/level.json"
+    },
+    {
+      "id": "bakery_shop",
+      "emoji": "🥐",
+      "title_zh": "法式面包烘焙店",
+      "subtitle_zh": "窑炉欧包与酥脆可颂",
+      "accentHex": "#F5B971",
+      "stickerCount": 16,
+      "thumb": "levels/bakery_shop/thumb.webp",
+      "dataUrl": "levels/bakery_shop/level.json"
+    }
+  ]
+}

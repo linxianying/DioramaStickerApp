@@ -18,6 +18,8 @@
 		AA0100090000000000000001 /* FreeModeToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0100090000000000000001 /* FreeModeToolbarView.swift */; };
 		AA01000A0000000000000001 /* MainGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB01000A0000000000000001 /* MainGameView.swift */; };
 		AA01000E0000000000000001 /* LevelGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB01000E0000000000000001 /* LevelGalleryView.swift */; };
+		AA01000F0000000000000001 /* TweezerOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB01000F0000000000000001 /* TweezerOverlayView.swift */; };
+		AA0100100000000000000001 /* SettingsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0100100000000000000001 /* SettingsSheetView.swift */; };
 		AA01000B0000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB01000B0000000000000001 /* Assets.xcassets */; };
 		AA01000C0000000000000001 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = BB01000C0000000000000001 /* Resources */; };
 /* End PBXBuildFile section */
@@ -35,6 +37,8 @@
 		BB0100090000000000000001 /* FreeModeToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeModeToolbarView.swift; sourceTree = "<group>"; };
 		BB01000A0000000000000001 /* MainGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGameView.swift; sourceTree = "<group>"; };
 		BB01000E0000000000000001 /* LevelGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelGalleryView.swift; sourceTree = "<group>"; };
+		BB01000F0000000000000001 /* TweezerOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweezerOverlayView.swift; sourceTree = "<group>"; };
+		BB0100100000000000000001 /* SettingsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheetView.swift; sourceTree = "<group>"; };
 		BB01000B0000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB01000C0000000000000001 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		BB01000D0000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 				BB0100090000000000000001 /* FreeModeToolbarView.swift */,
 				BB01000A0000000000000001 /* MainGameView.swift */,
 				BB01000E0000000000000001 /* LevelGalleryView.swift */,
+				BB01000F0000000000000001 /* TweezerOverlayView.swift */,
+				BB0100100000000000000001 /* SettingsSheetView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -197,6 +203,8 @@
 				AA0100090000000000000001 /* FreeModeToolbarView.swift in Sources */,
 				AA01000A0000000000000001 /* MainGameView.swift in Sources */,
 				AA01000E0000000000000001 /* LevelGalleryView.swift in Sources */,
+				AA01000F0000000000000001 /* TweezerOverlayView.swift in Sources */,
+				AA0100100000000000000001 /* SettingsSheetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

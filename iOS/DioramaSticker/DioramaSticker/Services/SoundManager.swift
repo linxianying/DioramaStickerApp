@@ -1,6 +1,6 @@
 import AVFoundation
 
-/// Procedural cozy sound effects synthesizer using AVAudioEngine (requires zero external audio files)
+/// Procedural cozy sound effects synthesizer using AVAudioEngine (includes realistic paper-peel rustle + chime SFX)
 final class SoundManager {
     static let shared = SoundManager()
 
@@ -15,7 +15,7 @@ final class SoundManager {
         format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: format)
-        engine.mainMixerNode.outputVolume = 0.35
+        engine.mainMixerNode.outputVolume = 0.38
         try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
     }
 
@@ -31,6 +31,35 @@ final class SoundManager {
 
     func playPickup() {
         playTone(frequencies: [440, 587], duration: 0.08, sweep: true)
+    }
+
+    /// Crisp ASMR paper-peel rustle synthesized via band-shaped filtered noise sweep
+    func playPaperPeel() {
+        guard !isMuted else { return }
+        ensureRunning()
+
+        let duration = 0.17
+        let frameCount = AVAudioFrameCount(sampleRate * duration)
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else { return }
+        buffer.frameLength = frameCount
+        guard let samples = buffer.floatChannelData?[0] else { return }
+
+        var lastNoise: Float = 0
+        var lpState: Float = 0
+        let total = Int(frameCount)
+        for i in 0..<total {
+            let p = Float(i) / Float(total)
+            // Soft rising & tapering envelope like peeling glossy vinyl sticker off backing paper
+            let env = sin(p * .pi) * (0.45 + 0.55 * p)
+            let white = Float.random(in: -1.0...1.0)
+            // Simple high-pass difference + gentle smoothing for crisp paper crinkle timbre
+            let hp = white - lastNoise * 0.72
+            lastNoise = white
+            lpState = lpState * 0.55 + hp * 0.45
+            let zipTone = sin(Float(i) * (0.14 + p * 0.09)) * 0.14
+            samples[i] = (lpState * 0.42 + zipTone) * env
+        }
+        player.scheduleBuffer(buffer, at: nil, options: [], completionHandler: nil)
     }
 
     func playSnap() {
@@ -64,7 +93,6 @@ final class SoundManager {
         for i in 0..<total {
             let t = Double(i) / sampleRate
             let progress = Double(i) / Double(total)
-            // Soft attack and exponential decay envelope for cozy xylophone/pop timbre
             let attack = min(1.0, progress / 0.08)
             let decay = exp(-progress * 5.2)
             let env = Float(attack * decay)

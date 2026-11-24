@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="造景贴纸" />
+  <meta name="theme-color" content="#161a2e" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <title>微缩造景贴纸屋 · 治愈造景贴纸</title>
+  <style>
+    :root {
+      --bg-deep: #111527;
+      --bg-shell: #161a2e;
+      --bg-panel: #1e243f;
+      --bg-panel-2: #242b4a;
+      --border-soft: rgba(255, 255, 255, 0.12);
+      --gold: #ffd86b;
+      --gold-text: #1e1a2b;
+      --text-main: #f8f9ff;
+      --text-muted: rgba(255, 255, 255, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top, #1d2342 0%, #0e1120 100%);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 460px;
+      height: 100dvh;
+      max-height: 100dvh;
+      background: var(--bg-shell);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    @media (min-width: 520px) {
+      .app-shell {
+        height: min(880px, calc(100dvh - 28px));
+        border-radius: 34px;
+        border: 1px solid rgba(255,255,255,0.14);
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+      }
+    }
+
+    .hidden { display: none !important; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    button {
+      font: inherit;
+      color: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* ==================== GALLERY SCREEN ==================== */
+    #galleryScreen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .gallery-header {
+      padding: 16px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: linear-gradient(180deg, #1f2544 0%, #161a2e 100%);
+      border-bottom: 1px solid var(--border-soft);
+      flex-shrink: 0;
+    }
+
+    .gallery-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .gallery-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .stat-badge {
+      padding: 6px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.12);
+      text-align: center;
+    }
+    .stat-badge .num {
+      font-size: 12.5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .stat-badge .lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .circle-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: transform 0.14s, background 0.14s;
+    }
+    .circle-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.2); }
+
+    .gallery-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .level-card {
+      text-align: left;
+      border-radius: 20px;
+      padding: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+    .level-card:active { transform: scale(0.97); }
+    .level-card.done { border-color: rgba(255, 216, 107, 0.58); }
+
+    .level-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 896 / 1060;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #121628;
+    }
+    .level-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .level-pill {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.62);
+      color: #fff;
+      backdrop-filter: blur(4px);
+    }
+    .level-pill.done {
+      background: var(--gold);
+      color: var(--gold-text);
+    }
+
+    .level-info { padding: 8px 3px 3px; }
+    .level-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .level-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .prog-track {
+      width: 100%;
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.12);
+      overflow: hidden;
+      margin-top: 7px;
+    }
+    .prog-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    .tip-box {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+    .tip-box b { color: var(--gold); }
+
+    /* ==================== GAME SCREEN ==================== */
+    #gameScreen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .game-header {
+      padding: 10px 12px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(26, 31, 56, 0.92);
+      border-bottom: 1px solid var(--border-soft);
+      flex-shrink: 0;
+    }
+    .game-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .game-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mini-prog {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+    .mini-track {
+      width: 72px;
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.15);
+      overflow: hidden;
+    }
+    .mini-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .mini-num {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+      color: #ffe28a;
+    }
+    .free-sub {
+      font-size: 11px;
+      color: #9ec5ff;
+      margin-top: 2px;
+    }
+
+    .mode-switch {
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      flex-shrink: 0;
+    }
+    .mode-btn {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: var(--gold);
+      color: var(--gold-text);
+    }
+
+    .action-strip {
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .pill-btn {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.9);
+      transition: all 0.16s;
+    }
+    .pill-btn.active {
+      background: var(--gold);
+      color: var(--gold-text);
+    }
+    .pill-btn:active { transform: scale(0.95); }
+
+    .mini-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.11);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .mini-circle:active { transform: scale(0.92); }
+
+    /* ==================== DIORAMA STAGE ==================== */
+    .stage-wrap {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 10px 6px;
+      overflow: hidden;
+    }
+    #canvasViewport {
+      position: relative;
+      aspect-ratio: 896 / 1200;
+      height: 100%;
+      max-width: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.11);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.48);
+      touch-action: none;
+      background: #1a2138;
+    }
+    #canvasInner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-origin: center center;
+      transition: transform 0.14s ease-out;
+    }
+    .abs-full {
+      position: absolute;
+      inset: 0;
+    }
+    .no-ptr { pointer-events: none; }
+
+    #bgImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    .silhouette-hint {
+      filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(10deg);
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .loading-badge {
+      position: absolute;
+      inset: 0;
+      background: rgba(16, 20, 38, 0.72);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gold);
+      z-index: 60;
+      backdrop-filter: blur(3px);
+    }
+
+    .toast {
+      pointer-events: none;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(34, 40, 68, 0.96);
+      border: 1px solid rgba(255, 216, 107, 0.55);
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.38);
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 80;
+      white-space: nowrap;
+    }
+
+    /* ==================== FREE MODE INSPECTOR ==================== */
+    .free-inspector {
+      margin: 0 10px 6px;
+      padding: 8px 12px;
+      border-radius: 16px;
+      background: rgba(33, 39, 68, 0.96);
+      border: 1px solid rgba(255,255,255,0.14);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .insp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .insp-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .insp-btns { display: flex; gap: 4px; }
+    .insp-btn {
+      padding: 3px 7px;
+      border-radius: 8px;
+      font-size: 11px;
+      background: rgba(255,255,255,0.11);
+    }
+    .insp-btn.del { background: rgba(239, 68, 68, 0.28); color: #fecaca; }
+    .insp-sliders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.82);
+    }
+    .insp-sliders label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .insp-sliders input { width: 100%; accent-color: var(--gold); }
+
+    /* ==================== BOTTOM STICKER TRAY ==================== */
+    .tray-panel {
+      margin: 0 10px 8px;
+      padding: 8px 0;
+      border-radius: 22px;
+      background: rgba(30, 35, 61, 0.96);
+      border: 1px solid var(--border-soft);
+      flex-shrink: 0;
+    }
+    .cat-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px 8px;
+      overflow-x: auto;
+    }
+    .cat-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.86);
+    }
+    .cat-pill.active { background: var(--gold); color: var(--gold-text); }
+    .cat-pill .cnt {
+      padding: 0 5px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: rgba(255,255,255,0.14);
+    }
+    .cat-pill.active .cnt { background: rgba(0,0,0,0.18); }
+
+    .tray-scroll {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      height: 86px;
+      overflow-x: auto;
+      touch-action: pan-x;
+    }
+
+    .sticker-card {
+      width: 74px;
+      height: 82px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      cursor: grab;
+      touch-action: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.16s, border-color 0.16s, background 0.16s;
+    }
+    .sticker-card.hinted {
+      background: rgba(255, 216, 107, 0.20);
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+    .sticker-card.peeling {
+      animation: cardPeelOut 0.28s ease-out;
+    }
+    .sticker-thumb {
+      width: 58px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .sticker-thumb img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .sticker-name {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+      width: 100%;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+    }
+
+    /* Die-cut white border + peel shadow */
+    .sticker-diecut {
+      filter:
+        drop-shadow(1.5px 0 0 rgba(255,255,255,0.92))
+        drop-shadow(-1.5px 0 0 rgba(255,255,255,0.92))
+        drop-shadow(0 1.5px 0 rgba(255,255,255,0.92))
+        drop-shadow(0 -1.5px 0 rgba(255,255,255,0.92))
+        drop-shadow(0 4px 6px rgba(0,0,0,0.38));
+    }
+    .sticker-dragging {
+      filter:
+        drop-shadow(2px 0 0 rgba(255,255,255,0.98))
+        drop-shadow(-2px 0 0 rgba(255,255,255,0.98))
+        drop-shadow(0 2px 0 rgba(255,255,255,0.98))
+        drop-shadow(0 -2px 0 rgba(255,255,255,0.98))
+        drop-shadow(0 14px 18px rgba(0,0,0,0.48));
+    }
+    .sticker-dragging.near-target {
+      filter:
+        drop-shadow(2px 0 0 #fff7cc)
+        drop-shadow(-2px 0 0 #fff7cc)
+        drop-shadow(0 2px 0 #fff7cc)
+        drop-shadow(0 -2px 0 #fff7cc)
+        drop-shadow(0 0 18px rgba(255, 224, 102, 0.88));
+    }
+
+    /* ==================== 3D PAPER-PEEL & TWEEZER ANIMATIONS ==================== */
+    #dragGhost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      transform: translate(-50%, -50%);
+      perspective: 500px;
+    }
+    #dragGhostInner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    #dragGhostImg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    @keyframes stickerPeel3D {
+      0% {
+        transform: perspective(420px) rotateX(34deg) rotateY(-24deg) skewX(-8deg) scale(0.76);
+        opacity: 0.72;
+      }
+      55% {
+        transform: perspective(420px) rotateX(-8deg) rotateY(8deg) skewX(2deg) scale(1.12);
+        opacity: 1;
+      }
+      100% {
+        transform: perspective(420px) rotateX(0deg) rotateY(0deg) skewX(0deg) scale(1.0);
+        opacity: 1;
+      }
+    }
+    .peel-anim {
+      animation: stickerPeel3D 0.30s cubic-bezier(0.22, 1.25, 0.4, 1) forwards;
+    }
+
+    @keyframes sheenSweep {
+      0% { transform: translate(-110%, -110%) rotate(35deg); opacity: 0.85; }
+      100% { transform: translate(140%, 140%) rotate(35deg); opacity: 0; }
+    }
+    .peel-sheen {
+      position: absolute;
+      inset: -30%;
+      background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.75) 50%, transparent 70%);
+      pointer-events: none;
+      animation: sheenSweep 0.34s ease-out forwards;
+    }
+
+    @keyframes cardPeelOut {
+      0% { transform: scale(1); }
+      40% { transform: scale(0.88) rotate(-4deg); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Kawaii precision tweezer SVG overlay */
+    #tweezerWrap {
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      right: -54px;
+      top: -54px;
+      pointer-events: none;
+      transform-origin: 12% 88%;
+      filter: drop-shadow(2px 6px 7px rgba(0, 0, 0, 0.42));
+      transition: transform 0.16s cubic-bezier(0.22, 1.2, 0.36, 1);
+    }
+    #tweezerWrap.near-target {
+      transform: rotate(-8deg) scale(0.97);
+    }
+    #tweezerWrap .prong-back {
+      transition: transform 0.15s ease-out;
+      transform-origin: 85% 15%;
+    }
+    #tweezerWrap.open .prong-back {
+      transform: rotate(12deg);
+    }
+
+    /* Release tweezer pop-open animation */
+    @keyframes tweezerRelease {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translate(18px, -18px) rotate(12deg) scale(1.06); opacity: 0; }
+    }
+    .tweezer-release-fx {
+      position: fixed;
+      width: 96px;
+      height: 96px;
+      pointer-events: none;
+      z-index: 998;
+      animation: tweezerRelease 0.28s ease-out forwards;
+    }
+
+    @keyframes snapBounce {
+      0% { transform: translate(-50%, -50%) scale(1.22); }
+      55% { transform: translate(-50%, -50%) scale(0.95); }
+      100% { transform: translate(-50%, -50%) scale(1.0); }
+    }
+    .snap-bounce { animation: snapBounce 0.36s cubic-bezier(0.22, 1.35, 0.45, 1) forwards; }
+
+    @keyframes pulseRing {
+      0%, 100% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.78; }
+      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+    }
+    .target-ring { animation: pulseRing 0.85s ease-in-out infinite; }
+
+    @keyframes sparkleOut {
+      0% { transform: translate(-50%, -50%) translate(0, 0) scale(1.1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+    }
+    .sparkle-dot { position: absolute; pointer-events: none; font-size: 14px; animation: sparkleOut 0.68s ease-out forwards; }
+
+    /* ==================== MODALS (SETTINGS & COMPLETE) ==================== */
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 8, 18, 0.68);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 12px;
+    }
+    .modal-backdrop.center { align-items: center; }
+
+    .modal-card {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 26px;
+      background: #1d223c;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 18px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h3 { font-size: 16px; font-weight: 800; }
+    .modal-done-btn {
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: var(--gold-text);
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .set-section {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .set-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .tool-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tool-opt {
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid transparent;
+      text-align: left;
+      transition: all 0.16s;
+    }
+    .tool-opt.active {
+      background: rgba(255, 216, 107, 0.16);
+      border-color: var(--gold);
+    }
+    .tool-opt .t-title { font-size: 13px; font-weight: 700; margin-top: 4px; }
+    .tool-opt .t-sub { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; line-height: 1.35; }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding-top: 4px;
+    }
+    .color-chips { display: flex; gap: 6px; }
+    .color-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.09);
+    }
+    .color-chip.active { background: var(--gold); color: var(--gold-text); }
+    .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .toggle-info .ti-title { font-size: 13px; font-weight: 600; }
+    .toggle-info .ti-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .switch {
+      width: 44px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.2);
+      position: relative;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .switch.on { background: var(--gold); }
+    .switch::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    }
+    .switch.on::after { transform: translateX(18px); }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ==================== SCREEN 1: GALLERY ==================== -->
+    <div id="galleryScreen">
+      <div class="gallery-header">
+        <div>
+          <h1 class="gallery-title">微缩造景贴纸屋</h1>
+          <p id="gallerySubtitle" class="gallery-sub">6 大治愈主题 · 共 121 张独立贴纸</p>
+        </div>
+        <div class="header-actions">
+          <div class="stat-badge">
+            <div id="galleryTotalBadge" class="num">0/121</div>
+            <div class="lbl">已收集</div>
+          </div>
+          <button id="btnGallerySettings" class="circle-btn" title="手感与动画设置">⚙️</button>
+        </div>
+      </div>
+
+      <div class="gallery-scroll no-scrollbar">
+        <div id="galleryGrid" class="gallery-grid"></div>
+        <div class="tip-box">
+          ✨ 点击右上角 <b>⚙️ 设置</b> 可自由切换 <b>✂️ 镊子夹取 / 🖐️ 手指直贴</b>、镊子配色与 <b>📄 撕纸剥离动画</b>。<br/>
+          📱 iPhone Safari 点击底部分享 →「添加到主屏幕」即可全屏当原生 App 玩！
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN 2: ACTIVE LEVEL ==================== -->
+    <div id="gameScreen" class="hidden">
+      <div class="game-header">
+        <div class="game-header-left">
+          <button id="btnBackGallery" class="circle-btn" style="width:32px;height:32px;font-size:18px;font-weight:700;" title="返回图鉴">‹</button>
+          <div style="min-width:0;">
+            <div id="levelTitleEl" class="game-title">森林篝火晚会</div>
+            <div id="classicProgressRow" class="mini-prog">
+              <div class="mini-track"><div id="progressBar" class="mini-fill" style="width:0%"></div></div>
+              <span id="progressText" class="mini-num">0/30</span>
+            </div>
+            <div id="freeStatusRow" class="free-sub hidden">已摆 <b id="freeCountText">0</b> 张 · 点选可缩放旋转</div>
+          </div>
+        </div>
+
+        <div class="mode-switch">
+          <button id="btnModeClassic" class="mode-btn active">闯关找位</button>
+          <button id="btnModeFree" class="mode-btn">自由造景</button>
+        </div>
+      </div>
+
+      <div class="action-strip">
+        <div id="classicTools" class="action-group">
+          <button id="btnOutline" class="pill-btn active">👁 轮廓</button>
+          <button id="btnPeek" class="pill-btn">🖼 按住看原图</button>
+          <button id="btnHint" class="pill-btn">💡 提示</button>
+        </div>
+        <div id="freeToolsTop" class="action-group hidden">
+          <button id="btnLoadOfficial" class="pill-btn">✨ 载入官方图</button>
+          <button id="btnExportPNG" class="pill-btn active">📸 导出海报</button>
+        </div>
+        <div class="action-group" style="flex-shrink:0;">
+          <button id="btnZoom" class="pill-btn" style="font-family:ui-monospace,monospace;">1.0x</button>
+          <button id="btnGameSettings" class="mini-circle" title="设置">⚙️</button>
+          <button id="btnReset" class="mini-circle" title="重置">↺</button>
+        </div>
+      </div>
+
+      <div class="stage-wrap">
+        <div id="canvasViewport">
+          <div id="canvasInner">
+            <img id="bgImage" alt="造景空白底图" draggable="false" />
+            <div id="outlineLayer" class="abs-full no-ptr"></div>
+            <div id="targetRingLayer" class="abs-full no-ptr" style="z-index:40;"></div>
+            <div id="placedLayer" class="abs-full"></div>
+            <div id="peekLayer" class="abs-full no-ptr" style="opacity:0;transition:opacity 0.2s;z-index:50;"></div>
+            <div id="sparkleLayer" class="abs-full no-ptr" style="z-index:55;"></div>
+          </div>
+          <div id="loadingOverlay" class="loading-badge hidden">
+            <div style="font-size:26px;">✨</div>
+            <div>正在展开贴纸册...</div>
+          </div>
+        </div>
+        <div id="toastEl" class="toast"></div>
+      </div>
+
+      <div id="freeInspector" class="free-inspector hidden">
+        <div class="insp-row">
+          <span id="inspectorTitle" class="insp-title">已选中贴纸</span>
+          <div class="insp-btns">
+            <button id="btnFlip" class="insp-btn">⇄ 翻转</button>
+            <button id="btnZUp" class="insp-btn">⬆ 置顶</button>
+            <button id="btnZDown" class="insp-btn">⬇ 置底</button>
+            <button id="btnDup" class="insp-btn">⧉ 复制</button>
+            <button id="btnDel" class="insp-btn del">✕</button>
+          </div>
+        </div>
+        <div class="insp-sliders">
+          <label><span>大小</span><input id="sliderScale" type="range" min="0.5" max="1.8" step="0.02" value="1" /></label>
+          <label><span>旋转</span><input id="sliderRotate" type="range" min="-45" max="45" step="1" value="0" /></label>
+        </div>
+      </div>
+
+      <div class="tray-panel">
+        <div id="categoryBar" class="cat-bar no-scrollbar"></div>
+        <div id="trayScroll" class="tray-scroll no-scrollbar"></div>
+      </div>
+    </div>
+
+    <!-- ==================== FLOATING DRAGGED STICKER + TWEEZER ==================== -->
+    <div id="dragGhost" class="hidden">
+      <div id="dragGhostInner">
+        <img id="dragGhostImg" alt="" class="sticker-dragging" draggable="false" />
+        <div id="tweezerWrap" class="hidden"></div>
+      </div>
+    </div>
+
+    <!-- ==================== SETTINGS MODAL ==================== -->
+    <div id="settingsModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3>⚙️ 手感与动画设置</h3>
+          <button id="btnCloseSettings" class="modal-done-btn">完成</button>
+        </div>
+
+        <div class="set-section">
+          <div class="set-label">贴纸拿取方式</div>
+          <div class="tool-options">
+            <button id="optTweezers" class="tool-opt active">
+              <div style="font-size:20px;">✂️</div>
+              <div class="t-title">镊子夹取</div>
+              <div class="t-sub">手账微缩镊子精准夹起贴纸，沉浸感拉满</div>
+            </button>
+            <button id="optFinger" class="tool-opt">
+              <div style="font-size:20px;">🖐️</div>
+              <div class="t-title">手指直贴</div>
+              <div class="t-sub">简洁直观，手指直接拖拽落位</div>
+            </button>
+          </div>
+
+          <div id="tweezerColorRow" class="color-row">
+            <span style="font-size:11.5px;color:var(--text-muted);">镊子配色</span>
+            <div class="color-chips">
+              <button class="color-chip active" data-theme="roseGold"><span class="swatch" style="background:#faa8be;"></span>樱花粉</button>
+              <button class="color-chip" data-theme="champagne"><span class="swatch" style="background:#f9d88e;"></span>奶油金</button>
+              <button class="color-chip" data-theme="silver"><span class="swatch" style="background:#d6e0f0;"></span>极简银</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-label">动效与感官反馈</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">📄 贴纸撕纸剥离动画</div>
+              <div class="ti-sub">揭起贴纸时播放 3D 翻角卷起高光 + 撕纸沙沙声</div>
+            </div>
+            <button id="togPeel" class="switch on" aria-label="撕纸动画开关"></button>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">🔊 治愈交互音效</div>
+              <div class="ti-sub">纸张剥离声、磁吸叮咚音与通关旋律</div>
+            </div>
+            <button id="togSound" class="switch on" aria-label="音效开关"></button>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">📳 触感震动反馈</div>
+              <div class="ti-sub">揭起与磁吸落位时的细腻震动（支持的设备）</div>
+            </div>
+            <button id="togHaptics" class="switch on" aria-label="震动开关"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== COMPLETION MODAL ==================== -->
+    <div id="completeModal" class="modal-backdrop center hidden">
+      <div class="modal-card" style="text-align:center;align-items:center;border-color:rgba(255,216,107,0.55);">
+        <div style="font-size:48px;">🎉</div>
+        <h3 id="completeTitleEl" style="font-size:18px;">造景完成！</h3>
+        <p style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">
+          本关全部贴纸已完美归位！<br/>
+          现已解锁「自由造景模式」，或返回图鉴挑战下一个小世界。
+        </p>
+        <div style="display:flex;gap:10px;padding-top:6px;">
+          <button id="btnCompleteGallery" class="pill-btn" style="padding:8px 16px;">换下一关</button>
+          <button id="btnGoFree" class="pill-btn active" style="padding:8px 16px;">自由造景 ✨</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = [
+      { id: "全部", label: "全部", icon: "✨" },
+      { id: "营地设施", label: "场景家具", icon: "⛺" },
+      { id: "露营道具", label: "可爱道具", icon: "🎀" },
+      { id: "卡通人物", label: "卡通人物", icon: "🧒" },
+      { id: "可爱动物", label: "萌宠动物", icon: "🐾" },
+      { id: "星空光效", label: "星空光效", icon: "🌙" }
+    ];
+
+    const TWEEZER_PALETTES = {
+      roseGold:  { hi: "#ffe3ec", main: "#f8a5bc", dark: "#b56178", stroke: "#6c3142" },
+      champagne: { hi: "#fff6d8", main: "#f7d47c", dark: "#be9440", stroke: "#6e521b" },
+      silver:    { hi: "#ffffff", main: "#d1dbe8", dark: "#8e9bb0", stroke: "#404a5c" }
+    };
+
+    function buildTweezerSVG(themeKey) {
+      const p = TWEEZER_PALETTES[themeKey] || TWEEZER_PALETTES.roseGold;
+      return `
+        <svg viewBox="0 0 100 100" width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="twGradFront_${themeKey}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${p.hi}"/>
+              <stop offset="55%" stop-color="${p.main}"/>
+              <stop offset="100%" stop-color="${p.dark}"/>
+            </linearGradient>
+          </defs>
+          <!-- Back curved prong -->
+          <path class="prong-back" d="M 10 92 Q 48 56 85 10 L 93 17 Q 58 64 14 95 Z"
+                fill="${p.dark}" stroke="${p.stroke}" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Front curved prong with glossy sheen -->
+          <path d="M 6 88 Q 42 48 82 6 L 91 14 Q 52 58 10 92 Z"
+                fill="url(#twGradFront_${themeKey})" stroke="${p.stroke}" stroke-width="2.1" stroke-linejoin="round"/>
+          <!-- Tiny rivet dot near handle -->
+          <circle cx="80" cy="17" r="3" fill="${p.hi}" stroke="${p.stroke}" stroke-width="1.3"/>
+          <!-- Specular highlight line -->
+          <path d="M 22 72 Q 48 45 72 20" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round"/>
+        </svg>`;
+    }
+
+    // Cozy Web Audio synthesizer including ASMR paper-peel noise!
+    const AudioSFX = (() => {
+      let ctx = null;
+      function getCtx() {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === "suspended") ctx.resume();
+        return ctx;
+      }
+      function tone(freqs, dur, sweep = false, vol = 0.14) {
+        if (!settings.sound) return;
+        try {
+          const ac = getCtx(), now = ac.currentTime;
+          const gain = ac.createGain();
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(vol, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+          gain.connect(ac.destination);
+          if (sweep && freqs.length >= 2) {
+            const osc = ac.createOscillator();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freqs[0], now);
+            osc.frequency.exponentialRampToValueAtTime(freqs[1], now + dur);
+            osc.connect(gain); osc.start(now); osc.stop(now + dur);
+          } else {
+            freqs.forEach(f => {
+              const osc = ac.createOscillator();
+              osc.type = "triangle";
+              osc.frequency.setValueAtTime(f, now);
+              osc.connect(gain); osc.start(now); osc.stop(now + dur);
+            });
+          }
+        } catch (_) {}
+      }
+      function peel() {
+        if (!settings.sound) return;
+        try {
+          const ac = getCtx(), now = ac.currentTime;
+          const dur = 0.17;
+          const bufSize = Math.floor(ac.sampleRate * dur);
+          const buf = ac.createBuffer(1, bufSize, ac.sampleRate);
+          const data = buf.getChannelData(0);
+          let last = 0, lp = 0;
+          for (let i = 0; i < bufSize; i++) {
+            const p = i / bufSize;
+            const env = Math.sin(p * Math.PI) * (0.45 + 0.55 * p);
+            const w = Math.random() * 2 - 1;
+            const hp = w - last * 0.72;
+            last = w;
+            lp = lp * 0.52 + hp * 0.48;
+            data[i] = lp * env * 0.42;
+          }
+          const src = ac.createBufferSource();
+          src.buffer = buf;
+          const filter = ac.createBiquadFilter();
+          filter.type = "bandpass";
+          filter.frequency.setValueAtTime(1800, now);
+          filter.frequency.exponentialRampToValueAtTime(4200, now + dur);
+          filter.Q.value = 1.2;
+          const g = ac.createGain();
+          g.gain.value = 0.55;
+          src.connect(filter);
+          filter.connect(g);
+          g.connect(ac.destination);
+          src.start(now);
+        } catch (_) {}
+      }
+      return {
+        pickup() { tone([420, 580], 0.08, true, 0.11); },
+        peel,
+        tick() { tone([680], 0.04, false, 0.07); },
+        snap() { tone([523.25, 659.25, 783.99], 0.17, false, 0.13); },
+        miss() { tone([320, 240], 0.10, true, 0.09); },
+        complete() {
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => tone([f], 0.28, false, 0.14), i * 110));
+        }
+      };
+    })();
+
+    function haptic(ms) {
+      if (settings.haptics && navigator.vibrate) {
+        try { navigator.vibrate(ms); } catch (_) {}
+      }
+    }
+
+    // Settings persistence
+    const SETTINGS_KEY = "diorama_settings_v2";
+    const settings = {
+      tool: "tweezers",       // "tweezers" | "finger"
+      tweezerTheme: "roseGold", // "roseGold" | "champagne" | "silver"
+      peelAnim: true,
+      sound: true,
+      haptics: true
+    };
+    try {
+      const savedSet = localStorage.getItem(SETTINGS_KEY);
+      if (savedSet) Object.assign(settings, JSON.parse(savedSet));
+    } catch (_) {}
+    function saveSettings() {
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (_) {}
+    }
+
+    // Progress persistence
+    const PROGRESS_KEY = "diorama_progress_v2";
+    const progressStore = {};
+    try {
+      const raw = localStorage.getItem(PROGRESS_KEY);
+      if (raw) Object.assign(progressStore, JSON.parse(raw));
+    } catch (_) {}
+    function ensureProgress(levelId) {
+      if (!progressStore[levelId]) progressStore[levelId] = { placedClassic: [], freeItems: [] };
+      return progressStore[levelId];
+    }
+    function saveProgress() {
+      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progressStore)); } catch (_) {}
+    }
+
+    // App State
+    const state = {
+      manifest: [],
+      levelCache: new Map(), // levelId -> parsed level.json
+      activeMeta: null,
+      activeLevel: null,
+      mode: "classic",
+      category: "全部",
+      showOutlines: true,
+      spotlightId: null,
+      zoomLevels: [1.0, 1.5, 2.0],
+      zoomIdx: 0,
+      panX: 0,
+      panY: 0,
+      selectedFreeUid: null,
+      drag: null
+    };
+
+    // DOM refs
+    const galleryScreen = document.getElementById("galleryScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const galleryGrid = document.getElementById("galleryGrid");
+    const bgImage = document.getElementById("bgImage");
+    const canvasViewport = document.getElementById("canvasViewport");
+    const canvasInner = document.getElementById("canvasInner");
+    const outlineLayer = document.getElementById("outlineLayer");
+    const targetRingLayer = document.getElementById("targetRingLayer");
+    const placedLayer = document.getElementById("placedLayer");
+    const peekLayer = document.getElementById("peekLayer");
+    const sparkleLayer = document.getElementById("sparkleLayer");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const categoryBar = document.getElementById("categoryBar");
+    const trayScroll = document.getElementById("trayScroll");
+    const dragGhost = document.getElementById("dragGhost");
+    const dragGhostInner = document.getElementById("dragGhostInner");
+    const dragGhostImg = document.getElementById("dragGhostImg");
+    const tweezerWrap = document.getElementById("tweezerWrap");
+    const toastEl = document.getElementById("toastEl");
+    const completeModal = document.getElementById("completeModal");
+    const settingsModal = document.getElementById("settingsModal");
+    const freeInspector = document.getElementById("freeInspector");
+
+    let toastTimer = null;
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.style.opacity = "1";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toastEl.style.opacity = "0"; }, 2200);
+    }
+
+    function stickerAssetUrl(levelId, file) {
+      return `levels/${levelId}/${file}`;
+    }
+
+    function curPlacedSet() { return new Set(ensureProgress(state.activeMeta.id).placedClassic); }
+    function curFreeItems() { return ensureProgress(state.activeMeta.id).freeItems; }
+    function curStickerMap() { return new Map(state.activeLevel.stickers.map(s => [s.id, s])); }
+
+    // ==================== BOOTSTRAP ====================
+    async function init() {
+      syncSettingsUI();
+      const res = await fetch("levels_manifest.json");
+      const data = await res.json();
+      state.manifest = data.levels;
+      renderGallery();
+    }
+
+    function renderGallery() {
+      let totalPlaced = 0, totalStickers = 0;
+      galleryGrid.innerHTML = "";
+
+      state.manifest.forEach(item => {
+        const placed = ensureProgress(item.id).placedClassic.length;
+        const total = item.stickerCount;
+        totalPlaced += placed;
+        totalStickers += total;
+        const done = placed >= total;
+        const pct = Math.round((placed / total) * 100);
+
+        const card = document.createElement("button");
+        card.className = "level-card" + (done ? " done" : "");
+        card.innerHTML = `
+          <div class="level-thumb-wrap">
+            <img src="${item.thumb}" alt="${item.title_zh}" loading="lazy" draggable="false" />
+            <span class="level-pill ${done ? "done" : ""}">${done ? "已通关 ✓" : placed + "/" + total}</span>
+          </div>
+          <div class="level-info">
+            <div class="level-name">${item.emoji} ${item.title_zh}</div>
+            <div class="level-sub">${item.subtitle_zh}</div>
+            <div class="prog-track">
+              <div class="prog-fill" style="width:${pct}%;background:${item.accentHex};"></div>
+            </div>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          AudioSFX.pickup();
+          haptic(12);
+          openLevel(item);
+        });
+        galleryGrid.appendChild(card);
+      });
+
+      document.getElementById("gallerySubtitle").textContent = `${state.manifest.length} 大治愈主题 · 共 ${totalStickers} 张独立贴纸`;
+      document.getElementById("galleryTotalBadge").textContent = `${totalPlaced}/${totalStickers}`;
+    }
+
+    async function openLevel(meta) {
+      state.activeMeta = meta;
+      state.category = "全部";
+      state.spotlightId = null;
+      state.selectedFreeUid = null;
+      state.zoomIdx = 0;
+      state.panX = 0;
+      state.panY = 0;
+
+      galleryScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+      completeModal.classList.add("hidden");
+      loadingOverlay.classList.remove("hidden");
+      document.getElementById("levelTitleEl").textContent = `${meta.emoji} ${meta.title_zh}`;
+
+      let lvl = state.levelCache.get(meta.id);
+      if (!lvl) {
+        const res = await fetch(meta.dataUrl);
+        lvl = await res.json();
+        state.levelCache.set(meta.id, lvl);
+      }
+      state.activeLevel = lvl;
+
+      // Preload background image before hiding loader
+      await new Promise((resolve) => {
+        bgImage.onload = resolve;
+        bgImage.onerror = resolve;
+        bgImage.src = stickerAssetUrl(meta.id, lvl.backgroundFile);
+      });
+
+      loadingOverlay.classList.add("hidden");
+      buildPeekLayer();
+      renderAll();
+    }
+
+    function backToGallery() {
+      completeModal.classList.add("hidden");
+      gameScreen.classList.add("hidden");
+      galleryScreen.classList.remove("hidden");
+      renderGallery();
+    }
+
+    function buildPeekLayer() {
+      const lid = state.activeMeta.id;
+      const lvl = state.activeLevel;
+      peekLayer.innerHTML = "";
+      const bg = document.createElement("img");
+      bg.src = stickerAssetUrl(lid, lvl.backgroundFile);
+      bg.className = "abs-full";
+      bg.style.width = "100%";
+      bg.style.height = "100%";
+      bg.style.objectFit = "cover";
+      peekLayer.appendChild(bg);
+      lvl.stickers.forEach(s => {
+        const img = document.createElement("img");
+        img.src = stickerAssetUrl(lid, s.file);
+        img.style.position = "absolute";
+        img.style.left = (s.normX * 100) + "%";
+        img.style.top = (s.normY * 100) + "%";
+        img.style.width = (s.normW * 100) + "%";
+        img.style.height = (s.normH * 100) + "%";
+        img.style.transform = "translate(-50%, -50%)";
+        peekLayer.appendChild(img);
+      });
+    }
+
+    function spawnSparkles(normX, normY) {
+      for (let i = 0; i < 10; i++) {
+        const angle = (Math.PI * 2 * i) / 10 + Math.random() * 0.3;
+        const dist = 24 + Math.random() * 24;
+        const dot = document.createElement("div");
+        dot.className = "sparkle-dot";
+        dot.textContent = i % 2 === 0 ? "✦" : "★";
+        dot.style.color = i % 2 === 0 ? "#ffe066" : "#ffffff";
+        dot.style.left = (normX * 100) + "%";
+        dot.style.top = (normY * 100) + "%";
+        dot.style.setProperty("--dx", (Math.cos(angle) * dist).toFixed(1) + "px");
+        dot.style.setProperty("--dy", (Math.sin(angle) * dist).toFixed(1) + "px");
+        sparkleLayer.appendChild(dot);
+        setTimeout(() => dot.remove(), 700);
+      }
+    }
+
+    function spawnTweezerRelease(x, y) {
+      if (settings.tool !== "tweezers") return;
+      const fx = document.createElement("div");
+      fx.className = "tweezer-release-fx";
+      fx.style.left = (x + 28) + "px";
+      fx.style.top = (y - 28) + "px";
+      fx.innerHTML = buildTweezerSVG(settings.tweezerTheme);
+      const back = fx.querySelector(".prong-back");
+      if (back) back.style.transform = "rotate(14deg)";
+      document.body.appendChild(fx);
+      setTimeout(() => fx.remove(), 290);
+    }
+
+    function currentZoom() { return state.zoomLevels[state.zoomIdx]; }
+    function applyCameraTransform() {
+      const z = currentZoom();
+      if (z <= 1.01) { state.panX = 0; state.panY = 0; }
+      canvasInner.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${z})`;
+      document.getElementById("btnZoom").textContent = z.toFixed(1) + "x";
+    }
+
+    function clientToNorm(clientX, clientY, applyThumbOffset = true) {
+      const rect = canvasViewport.getBoundingClientRect();
+      const z = currentZoom();
+      const offsetY = applyThumbOffset ? -42 : 0;
+      const cx = rect.left + rect.width / 2 + state.panX;
+      const cy = rect.top + rect.height / 2 + state.panY;
+      return {
+        normX: ((clientX - cx) / z) / rect.width + 0.5,
+        normY: ((clientY + offsetY - cy) / z) / rect.height + 0.5
+      };
+    }
+
+    function isNearClassicTarget(sticker, normX, normY) {
+      const bonus = Math.max(sticker.normW, sticker.normH) > 0.42 ? 0.14 : 0;
+      return Math.hypot(normX - sticker.normX, normY - sticker.normY) <= (0.088 + bonus);
+    }
+
+    // ==================== RENDERING ====================
+    function renderHeader() {
+      const isClassic = state.mode === "classic";
+      document.getElementById("levelTitleEl").textContent = `${state.activeMeta.emoji} ${state.activeMeta.title_zh}`;
+      document.getElementById("classicProgressRow").classList.toggle("hidden", !isClassic);
+      document.getElementById("freeStatusRow").classList.toggle("hidden", isClassic);
+      document.getElementById("classicTools").classList.toggle("hidden", !isClassic);
+      document.getElementById("freeToolsTop").classList.toggle("hidden", isClassic);
+
+      document.getElementById("btnModeClassic").classList.toggle("active", isClassic);
+      document.getElementById("btnModeFree").classList.toggle("active", !isClassic);
+
+      const placed = curPlacedSet().size;
+      const total = state.activeLevel.stickers.length;
+      document.getElementById("progressBar").style.width = `${(placed / total) * 100}%`;
+      document.getElementById("progressText").textContent = `${placed}/${total}`;
+      document.getElementById("freeCountText").textContent = curFreeItems().length;
+      document.getElementById("btnOutline").classList.toggle("active", state.showOutlines);
+    }
+
+    function renderCategories() {
+      categoryBar.innerHTML = "";
+      const stickers = state.activeLevel.stickers;
+      const placedSet = curPlacedSet();
+      const present = new Set(stickers.map(s => s.category));
+
+      CATEGORIES.filter(c => c.id === "全部" || present.has(c.id)).forEach(cat => {
+        const active = state.category === cat.id;
+        const count = stickers.filter(s => {
+          const ok = cat.id === "全部" || s.category === cat.id;
+          return state.mode === "classic" ? (ok && !placedSet.has(s.id)) : ok;
+        }).length;
+
+        const btn = document.createElement("button");
+        btn.className = "cat-pill" + (active ? " active" : "");
+        btn.innerHTML = `<span>${cat.icon}</span><span>${cat.label}</span>` +
+          (state.mode === "classic" ? `<span class="cnt">${count}</span>` : "");
+        btn.addEventListener("click", () => {
+          state.category = cat.id;
+          AudioSFX.tick();
+          renderCategories();
+          renderTray();
+        });
+        categoryBar.appendChild(btn);
+      });
+    }
+
+    function renderTray() {
+      trayScroll.innerHTML = "";
+      const lid = state.activeMeta.id;
+      const placedSet = curPlacedSet();
+      const items = state.activeLevel.stickers.filter(s => {
+        const ok = state.category === "全部" || s.category === state.category;
+        return state.mode === "classic" ? (ok && !placedSet.has(s.id)) : ok;
+      });
+
+      if (items.length === 0) {
+        const empty = document.createElement("div");
+        empty.style.cssText = "width:100%;text-align:center;font-size:12px;color:rgba(255,255,255,0.75);";
+        empty.textContent = "🎉 这一类贴纸已经全部贴完啦！";
+        trayScroll.appendChild(empty);
+        return;
+      }
+
+      items.forEach(s => {
+        const card = document.createElement("div");
+        card.className = "sticker-card" + (state.spotlightId === s.id ? " hinted" : "");
+
+        const wrap = document.createElement("div");
+        wrap.className = "sticker-thumb";
+        const img = document.createElement("img");
+        img.src = stickerAssetUrl(lid, s.file);
+        img.alt = s.name_zh;
+        img.className = "sticker-diecut";
+        img.draggable = false;
+        wrap.appendChild(img);
+
+        const lbl = document.createElement("div");
+        lbl.className = "sticker-name";
+        lbl.textContent = s.name_zh;
+
+        card.appendChild(wrap);
+        card.appendChild(lbl);
+
+        card.addEventListener("pointerdown", (e) => {
+          e.preventDefault();
+          if (settings.peelAnim) {
+            card.classList.add("peeling");
+            setTimeout(() => card.classList.remove("peeling"), 300);
+          }
+          startStickerDrag(s, e, null);
+        });
+        trayScroll.appendChild(card);
+      });
+    }
+
+    function renderCanvas(justSnappedId = null) {
+      const lid = state.activeMeta.id;
+      const stickers = state.activeLevel.stickers;
+      const placedSet = curPlacedSet();
+      const sMap = curStickerMap();
+
+      outlineLayer.innerHTML = "";
+      if (state.mode === "classic" && state.showOutlines) {
+        stickers.forEach(s => {
+          if (placedSet.has(s.id)) return;
+          const img = document.createElement("img");
+          img.src = stickerAssetUrl(lid, s.file);
+          img.className = "silhouette-hint";
+          img.style.position = "absolute";
+          img.style.left = (s.normX * 100) + "%";
+          img.style.top = (s.normY * 100) + "%";
+          img.style.width = (s.normW * 100) + "%";
+          img.style.height = (s.normH * 100) + "%";
+          img.style.transform = "translate(-50%, -50%)";
+          outlineLayer.appendChild(img);
+        });
+      }
+
+      renderTargetRing();
+
+      placedLayer.innerHTML = "";
+      if (state.mode === "classic") {
+        stickers
+          .filter(s => placedSet.has(s.id))
+          .sort((a, b) => a.zIndex - b.zIndex)
+          .forEach(s => {
+            const img = document.createElement("img");
+            img.src = stickerAssetUrl(lid, s.file);
+            img.className = "no-ptr" + (justSnappedId === s.id ? " snap-bounce" : "");
+            img.style.position = "absolute";
+            img.style.left = (s.normX * 100) + "%";
+            img.style.top = (s.normY * 100) + "%";
+            img.style.width = (s.normW * 100) + "%";
+            img.style.height = (s.normH * 100) + "%";
+            img.style.transform = "translate(-50%, -50%)";
+            img.style.zIndex = s.zIndex;
+            placedLayer.appendChild(img);
+          });
+      } else {
+        [...curFreeItems()]
+          .sort((a, b) => a.zIndex - b.zIndex)
+          .forEach(item => {
+            const def = sMap.get(item.stickerId);
+            if (!def) return;
+            const selected = state.selectedFreeUid === item.uid;
+            const wrap = document.createElement("div");
+            wrap.style.position = "absolute";
+            wrap.style.cursor = "move";
+            wrap.style.left = (item.normX * 100) + "%";
+            wrap.style.top = (item.normY * 100) + "%";
+            wrap.style.width = (def.normW * item.scale * 100) + "%";
+            wrap.style.height = (def.normH * item.scale * 100) + "%";
+            wrap.style.transform = `translate(-50%, -50%) rotate(${item.rotate}deg)`;
+            wrap.style.zIndex = item.zIndex;
+            wrap.style.touchAction = "none";
+            if (selected) {
+              wrap.style.outline = "2px dashed #ffd86b";
+              wrap.style.outlineOffset = "3px";
+              wrap.style.borderRadius = "10px";
+            }
+
+            const img = document.createElement("img");
+            img.src = stickerAssetUrl(lid, def.file);
+            img.style.cssText = "width:100%;height:100%;object-fit:contain;pointer-events:none;";
+            img.style.transform = item.flipX ? "scaleX(-1)" : "";
+            img.draggable = false;
+            wrap.appendChild(img);
+
+            wrap.addEventListener("pointerdown", (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              state.selectedFreeUid = item.uid;
+              renderInspector();
+              renderCanvas();
+              startStickerDrag(def, e, item.uid);
+            });
+            placedLayer.appendChild(wrap);
+          });
+      }
+      renderInspector();
+    }
+
+    function renderTargetRing() {
+      targetRingLayer.innerHTML = "";
+      if (state.mode !== "classic") return;
+      const placedSet = curPlacedSet();
+      const sMap = curStickerMap();
+      let target = null, locked = false;
+      if (state.drag && state.drag.nearTarget) {
+        target = state.drag.sticker; locked = true;
+      } else if (state.spotlightId && !placedSet.has(state.spotlightId)) {
+        target = sMap.get(state.spotlightId);
+      }
+      if (!target) return;
+
+      const ring = document.createElement("div");
+      ring.className = "target-ring no-ptr";
+      ring.style.position = "absolute";
+      ring.style.borderRadius = "50%";
+      ring.style.left = (target.normX * 100) + "%";
+      ring.style.top = (target.normY * 100) + "%";
+      ring.style.width = Math.max(14, target.normW * 108) + "%";
+      ring.style.height = Math.max(11, target.normH * 108) + "%";
+      ring.style.border = locked ? "3px solid #ffe066" : "2.5px dashed rgba(255,255,255,0.88)";
+      ring.style.background = locked ? "rgba(255, 224, 102, 0.22)" : "rgba(255, 255, 255, 0.10)";
+      ring.style.boxShadow = "0 0 18px rgba(255, 224, 102, 0.72)";
+      targetRingLayer.appendChild(ring);
+    }
+
+    function renderInspector() {
+      if (state.mode !== "free" || !state.selectedFreeUid) {
+        freeInspector.classList.add("hidden");
+        return;
+      }
+      const item = curFreeItems().find(x => x.uid === state.selectedFreeUid);
+      if (!item) { freeInspector.classList.add("hidden"); return; }
+      const def = curStickerMap().get(item.stickerId);
+      freeInspector.classList.remove("hidden");
+      document.getElementById("inspectorTitle").textContent = def ? def.name_zh : "贴纸";
+      document.getElementById("sliderScale").value = item.scale;
+      document.getElementById("sliderRotate").value = item.rotate;
+    }
+
+    // ==================== DRAG WITH PEEL & TWEEZERS ====================
+    function startStickerDrag(sticker, e, freeUid) {
+      const fromTray = !freeUid;
+      haptic(14);
+      if (fromTray && settings.peelAnim) {
+        AudioSFX.peel();
+      } else {
+        AudioSFX.pickup();
+      }
+
+      const rect = canvasViewport.getBoundingClientRect();
+      const z = currentZoom();
+      const existingFree = freeUid ? curFreeItems().find(x => x.uid === freeUid) : null;
+      const scaleMult = existingFree ? existingFree.scale : 1;
+      const w = Math.max(46, sticker.normW * rect.width * z * scaleMult);
+      const h = Math.max(46, sticker.normH * rect.height * z * scaleMult);
+
+      dragGhostImg.src = stickerAssetUrl(state.activeMeta.id, sticker.file);
+      dragGhostImg.style.transform = existingFree && existingFree.flipX ? "scaleX(-1)" : "";
+      dragGhost.style.width = w + "px";
+      dragGhost.style.height = h + "px";
+
+      // Reset & trigger 3D paper-peel animation + sheen sweep if enabled
+      dragGhostInner.classList.remove("peel-anim");
+      dragGhostInner.querySelectorAll(".peel-sheen").forEach(el => el.remove());
+      if (fromTray && settings.peelAnim) {
+        void dragGhostInner.offsetWidth;
+        dragGhostInner.classList.add("peel-anim");
+        const sheen = document.createElement("div");
+        sheen.className = "peel-sheen";
+        dragGhostInner.appendChild(sheen);
+        setTimeout(() => sheen.remove(), 360);
+      }
+
+      // Render precision kawaii tweezers if enabled in Settings
+      if (settings.tool === "tweezers") {
+        tweezerWrap.innerHTML = buildTweezerSVG(settings.tweezerTheme);
+        tweezerWrap.classList.remove("hidden", "near-target");
+        tweezerWrap.classList.add("open");
+        requestAnimationFrame(() => tweezerWrap.classList.remove("open"));
+      } else {
+        tweezerWrap.classList.add("hidden");
+      }
+
+      dragGhost.classList.remove("hidden");
+      state.drag = { sticker, freeUid, nearTarget: false, applyThumbOffset: fromTray };
+      updateDragVisual(e.clientX, e.clientY);
+    }
+
+    function updateDragVisual(clientX, clientY) {
+      if (!state.drag) return;
+      const offsetY = state.drag.applyThumbOffset ? -42 : 0;
+      dragGhost.style.left = clientX + "px";
+      dragGhost.style.top = (clientY + offsetY) + "px";
+
+      if (state.mode === "classic") {
+        const { normX, normY } = clientToNorm(clientX, clientY, state.drag.applyThumbOffset);
+        const near = isNearClassicTarget(state.drag.sticker, normX, normY);
+        if (near && !state.drag.nearTarget) {
+          AudioSFX.tick();
+          haptic(10);
+        }
+        state.drag.nearTarget = near;
+        dragGhostImg.classList.toggle("near-target", near);
+        tweezerWrap.classList.toggle("near-target", near);
+        dragGhost.style.transform = `translate(-50%, -50%) scale(${near ? 1.03 : 1.07}) rotate(${near ? 0 : -4}deg)`;
+        renderTargetRing();
+      } else {
+        dragGhost.style.transform = "translate(-50%, -50%) scale(1.04)";
+      }
+    }
+
+    window.addEventListener("pointermove", (e) => {
+      if (state.drag) { e.preventDefault(); updateDragVisual(e.clientX, e.clientY); }
+    }, { passive: false });
+
+    window.addEventListener("pointerup", (e) => {
+      if (!state.drag) return;
+      const d = state.drag;
+      state.drag = null;
+      const offsetY = d.applyThumbOffset ? -42 : 0;
+      spawnTweezerRelease(e.clientX, e.clientY + offsetY);
+      dragGhost.classList.add("hidden");
+      dragGhostImg.classList.remove("near-target");
+
+      const { normX, normY } = clientToNorm(e.clientX, e.clientY, d.applyThumbOffset);
+      const store = ensureProgress(state.activeMeta.id);
+
+      if (state.mode === "classic") {
+        if (isNearClassicTarget(d.sticker, normX, normY)) {
+          if (!store.placedClassic.includes(d.sticker.id)) store.placedClassic.push(d.sticker.id);
+          if (state.spotlightId === d.sticker.id) state.spotlightId = null;
+          AudioSFX.snap();
+          haptic(24);
+          spawnSparkles(d.sticker.normX, d.sticker.normY);
+          saveProgress();
+          renderHeader();
+          renderCategories();
+          renderTray();
+          renderCanvas(d.sticker.id);
+
+          if (store.placedClassic.length === state.activeLevel.stickers.length) {
+            setTimeout(() => {
+              AudioSFX.complete();
+              haptic([30, 50, 40]);
+              document.getElementById("completeTitleEl").textContent = `${state.activeMeta.title_zh}造景完成！`;
+              completeModal.classList.remove("hidden");
+            }, 350);
+          }
+        } else {
+          AudioSFX.miss();
+          renderTargetRing();
+        }
+      } else {
+        if (normX >= 0.02 && normX <= 0.98 && normY >= 0.02 && normY <= 0.98) {
+          if (d.freeUid) {
+            const item = store.freeItems.find(x => x.uid === d.freeUid);
+            if (item) { item.normX = normX; item.normY = normY; }
+          } else {
+            const maxZ = store.freeItems.reduce((m, x) => Math.max(m, x.zIndex), 10);
+            const uid = "f_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
+            store.freeItems.push({ uid, stickerId: d.sticker.id, normX, normY, scale: 1.0, rotate: 0, flipX: false, zIndex: maxZ + 1 });
+            state.selectedFreeUid = uid;
+          }
+          AudioSFX.snap();
+          haptic(20);
+          spawnSparkles(normX, normY);
+          saveProgress();
+          renderHeader();
+          renderCanvas();
+        } else {
+          AudioSFX.miss();
+        }
+      }
+    });
+
+    // Pan when zoomed in
+    let panDrag = null;
+    canvasViewport.addEventListener("pointerdown", (e) => {
+      if (state.mode === "free") {
+        state.selectedFreeUid = null;
+        renderInspector();
+        renderCanvas();
+      }
+      if (currentZoom() > 1.05 && !state.drag) {
+        panDrag = { sx: e.clientX, sy: e.clientY, ox: state.panX, oy: state.panY };
+      }
+    });
+    window.addEventListener("pointermove", (e) => {
+      if (!panDrag || state.drag) return;
+      const rect = canvasViewport.getBoundingClientRect();
+      const maxX = rect.width * (currentZoom() - 1) * 0.5;
+      const maxY = rect.height * (currentZoom() - 1) * 0.5;
+      state.panX = Math.max(-maxX, Math.min(maxX, panDrag.ox + (e.clientX - panDrag.sx)));
+      state.panY = Math.max(-maxY, Math.min(maxY, panDrag.oy + (e.clientY - panDrag.sy)));
+      applyCameraTransform();
+    });
+    window.addEventListener("pointerup", () => { panDrag = null; });
+
+    // ==================== SETTINGS MODAL WIRING ====================
+    function syncSettingsUI() {
+      const isTw = settings.tool === "tweezers";
+      document.getElementById("optTweezers").classList.toggle("active", isTw);
+      document.getElementById("optFinger").classList.toggle("active", !isTw);
+      document.getElementById("tweezerColorRow").classList.toggle("hidden", !isTw);
+      document.querySelectorAll(".color-chip").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.theme === settings.tweezerTheme);
+      });
+      document.getElementById("togPeel").classList.toggle("on", settings.peelAnim);
+      document.getElementById("togSound").classList.toggle("on", settings.sound);
+      document.getElementById("togHaptics").classList.toggle("on", settings.haptics);
+    }
+
+    function openSettings() { AudioSFX.tick(); syncSettingsUI(); settingsModal.classList.remove("hidden"); }
+    function closeSettings() { AudioSFX.tick(); settingsModal.classList.add("hidden"); }
+
+    document.getElementById("btnGallerySettings").addEventListener("click", openSettings);
+    document.getElementById("btnGameSettings").addEventListener("click", openSettings);
+    document.getElementById("btnCloseSettings").addEventListener("click", closeSettings);
+    settingsModal.addEventListener("click", (e) => { if (e.target === settingsModal) closeSettings(); });
+
+    document.getElementById("optTweezers").addEventListener("click", () => { settings.tool = "tweezers"; saveSettings(); syncSettingsUI(); AudioSFX.tick(); });
+    document.getElementById("optFinger").addEventListener("click", () => { settings.tool = "finger"; saveSettings(); syncSettingsUI(); AudioSFX.tick(); });
+    document.querySelectorAll(".color-chip").forEach(btn => {
+      btn.addEventListener("click", () => { settings.tweezerTheme = btn.dataset.theme; saveSettings(); syncSettingsUI(); AudioSFX.tick(); });
+    });
+    document.getElementById("togPeel").addEventListener("click", () => { settings.peelAnim = !settings.peelAnim; saveSettings(); syncSettingsUI(); if (settings.peelAnim) AudioSFX.peel(); else AudioSFX.tick(); });
+    document.getElementById("togSound").addEventListener("click", () => { settings.sound = !settings.sound; saveSettings(); syncSettingsUI(); if (settings.sound) AudioSFX.tick(); });
+    document.getElementById("togHaptics").addEventListener("click", () => { settings.haptics = !settings.haptics; saveSettings(); syncSettingsUI(); haptic(16); });
+
+    // ==================== GAME CONTROLS ====================
+    document.getElementById("btnBackGallery").addEventListener("click", () => { AudioSFX.tick(); backToGallery(); });
+    document.getElementById("btnModeClassic").addEventListener("click", () => { state.mode = "classic"; state.selectedFreeUid = null; AudioSFX.tick(); renderAll(); });
+    document.getElementById("btnModeFree").addEventListener("click", () => {
+      state.mode = "free"; AudioSFX.tick(); renderAll();
+      if (curFreeItems().length === 0) showToast("自由模式：拖放任意贴纸，或点「载入官方图」DIY ✨");
+    });
+    document.getElementById("btnOutline").addEventListener("click", () => { state.showOutlines = !state.showOutlines; AudioSFX.tick(); renderHeader(); renderCanvas(); });
+
+    const btnPeek = document.getElementById("btnPeek");
+    const setPeek = (on) => { peekLayer.style.opacity = on ? "0.78" : "0"; btnPeek.classList.toggle("active", on); };
+    btnPeek.addEventListener("pointerdown", (e) => { e.preventDefault(); AudioSFX.tick(); setPeek(true); });
+    window.addEventListener("pointerup", () => setPeek(false));
+    btnPeek.addEventListener("pointerleave", () => setPeek(false));
+
+    document.getElementById("btnHint").addEventListener("click", () => {
+      const placedSet = curPlacedSet();
+      const rem = state.activeLevel.stickers.filter(s => (state.category === "全部" || s.category === state.category) && !placedSet.has(s.id));
+      const next = rem[0] || state.activeLevel.stickers.find(s => !placedSet.has(s.id));
+      if (!next) { showToast("本关贴纸已全部完成啦 🎉"); return; }
+      state.spotlightId = next.id;
+      AudioSFX.tick();
+      showToast(`已高亮「${next.name_zh}」的目标位置 ✨`);
+      renderTray();
+      renderTargetRing();
+      setTimeout(() => { if (state.spotlightId === next.id) { state.spotlightId = null; renderTray(); renderTargetRing(); } }, 4000);
+    });
+
+    document.getElementById("btnZoom").addEventListener("click", () => { state.zoomIdx = (state.zoomIdx + 1) % state.zoomLevels.length; AudioSFX.tick(); applyCameraTransform(); });
+    document.getElementById("btnReset").addEventListener("click", () => {
+      AudioSFX.miss();
+      const store = ensureProgress(state.activeMeta.id);
+      if (state.mode === "classic") { store.placedClassic = []; state.spotlightId = null; showToast("已重置本关闯关进度"); }
+      else { store.freeItems = []; state.selectedFreeUid = null; showToast("已清空自由造景画布"); }
+      saveProgress();
+      renderAll();
+    });
+
+    function loadOfficialToFree() {
+      const store = ensureProgress(state.activeMeta.id);
+      store.freeItems = state.activeLevel.stickers.map((s, idx) => ({
+        uid: "off_" + s.id + "_" + idx, stickerId: s.id, normX: s.normX, normY: s.normY, scale: 1.0, rotate: 0, flipX: false, zIndex: s.zIndex
+      }));
+      state.selectedFreeUid = null;
+      AudioSFX.snap();
+      saveProgress();
+      renderAll();
+      showToast("已载入官方布局，点选任意贴纸即可 DIY ✨");
+    }
+    document.getElementById("btnLoadOfficial").addEventListener("click", loadOfficialToFree);
+
+    function mutateSelected(fn) {
+      const item = curFreeItems().find(x => x.uid === state.selectedFreeUid);
+      if (!item) return;
+      fn(item);
+      saveProgress();
+      renderCanvas();
+    }
+    document.getElementById("btnFlip").addEventListener("click", () => { AudioSFX.tick(); mutateSelected(i => i.flipX = !i.flipX); });
+    document.getElementById("btnZUp").addEventListener("click", () => { AudioSFX.tick(); const m = curFreeItems().reduce((a, b) => Math.max(a, b.zIndex), 10); mutateSelected(i => i.zIndex = m + 1); });
+    document.getElementById("btnZDown").addEventListener("click", () => { AudioSFX.tick(); const m = curFreeItems().reduce((a, b) => Math.min(a, b.zIndex), 10); mutateSelected(i => i.zIndex = m - 1); });
+    document.getElementById("btnDup").addEventListener("click", () => {
+      const cur = curFreeItems().find(x => x.uid === state.selectedFreeUid);
+      if (!cur) return;
+      const m = curFreeItems().reduce((a, b) => Math.max(a, b.zIndex), 10);
+      const copy = { ...cur, uid: "f_" + Date.now(), normX: Math.min(0.92, cur.normX + 0.05), normY: Math.min(0.92, cur.normY + 0.04), zIndex: m + 1 };
+      curFreeItems().push(copy);
+      state.selectedFreeUid = copy.uid;
+      AudioSFX.pickup(); saveProgress(); renderHeader(); renderCanvas();
+    });
+    document.getElementById("btnDel").addEventListener("click", () => {
+      ensureProgress(state.activeMeta.id).freeItems = curFreeItems().filter(x => x.uid !== state.selectedFreeUid);
+      state.selectedFreeUid = null;
+      AudioSFX.miss(); saveProgress(); renderHeader(); renderCanvas();
+    });
+    document.getElementById("sliderScale").addEventListener("input", (e) => mutateSelected(i => i.scale = parseFloat(e.target.value)));
+    document.getElementById("sliderRotate").addEventListener("input", (e) => mutateSelected(i => i.rotate = parseFloat(e.target.value)));
+
+    document.getElementById("btnExportPNG").addEventListener("click", async () => {
+      const lid = state.activeMeta.id, lvl = state.activeLevel, sMap = curStickerMap();
+      const cvs = document.createElement("canvas");
+      cvs.width = lvl.canvasWidth; cvs.height = lvl.canvasHeight;
+      const ctx = cvs.getContext("2d");
+      const loadImg = (src) => new Promise((res, rej) => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => res(im); im.onerror = rej; im.src = src; });
+
+      ctx.drawImage(await loadImg(stickerAssetUrl(lid, lvl.backgroundFile)), 0, 0, cvs.width, cvs.height);
+      for (const item of [...curFreeItems()].sort((a, b) => a.zIndex - b.zIndex)) {
+        const def = sMap.get(item.stickerId);
+        if (!def) continue;
+        const im = await loadImg(stickerAssetUrl(lid, def.file));
+        ctx.save();
+        ctx.translate(item.normX * cvs.width, item.normY * cvs.height);
+        ctx.rotate((item.rotate * Math.PI) / 180);
+        if (item.flipX) ctx.scale(-1, 1);
+        const w = def.normW * cvs.width * item.scale, h = def.normH * cvs.height * item.scale;
+        ctx.drawImage(im, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      }
+      const link = document.createElement("a");
+      link.download = `${lvl.levelId}_diorama_diy.png`;
+      link.href = cvs.toDataURL("image/png");
+      link.click();
+      AudioSFX.complete();
+      showToast("已导出 896×1200 高清造景海报 📸");
+    });
+
+    document.getElementById("btnCompleteGallery").addEventListener("click", () => { AudioSFX.tick(); backToGallery(); });
+    document.getElementById("btnGoFree").addEventListener("click", () => {
+      completeModal.classList.add("hidden");
+      state.mode = "free";
+      if (curFreeItems().length === 0) loadOfficialToFree();
+      else renderAll();
+    });
+
+    function renderAll() {
+      renderHeader();
+      renderCategories();
+      renderTray();
+      renderCanvas();
+      applyCameraTransform();
+    }
+
+    init();
+  </script>
+</body>
+</html>

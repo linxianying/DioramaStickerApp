@@ -30,7 +30,31 @@ final class DioramaGameViewModel: ObservableObject {
     @Published var sparkles: [SparkleBurst] = []
     @Published var toastMessage: String? = nil
     @Published var isMuted: Bool = false {
-        didSet { SoundManager.shared.isMuted = isMuted }
+        didSet {
+            SoundManager.shared.isMuted = isMuted
+            UserDefaults.standard.set(isMuted, forKey: "diorama_setting_muted")
+        }
+    }
+    @Published var enableHaptics: Bool = true {
+        didSet {
+            HapticManager.shared.isEnabled = enableHaptics
+            UserDefaults.standard.set(enableHaptics, forKey: "diorama_setting_haptics")
+        }
+    }
+    @Published var pickupToolStyle: PickupToolStyle = .tweezers {
+        didSet {
+            UserDefaults.standard.set(pickupToolStyle.rawValue, forKey: "diorama_setting_tool")
+        }
+    }
+    @Published var tweezerTheme: TweezerTheme = .roseGold {
+        didSet {
+            UserDefaults.standard.set(tweezerTheme.rawValue, forKey: "diorama_setting_tweezer_theme")
+        }
+    }
+    @Published var enablePeelAnimation: Bool = true {
+        didSet {
+            UserDefaults.standard.set(enablePeelAnimation, forKey: "diorama_setting_peel")
+        }
     }
 
     let snapThreshold: CGFloat = 0.082
@@ -41,9 +65,31 @@ final class DioramaGameViewModel: ObservableObject {
     }
 
     init() {
+        loadUserSettings()
         manifest = LevelLoader.shared.loadManifest()
         if let first = manifest.first {
             selectLevel(first)
+        }
+    }
+
+    private func loadUserSettings() {
+        let ud = UserDefaults.standard
+        isMuted = ud.bool(forKey: "diorama_setting_muted")
+        SoundManager.shared.isMuted = isMuted
+        if ud.object(forKey: "diorama_setting_haptics") != nil {
+            enableHaptics = ud.bool(forKey: "diorama_setting_haptics")
+        }
+        HapticManager.shared.isEnabled = enableHaptics
+        if let rawTool = ud.string(forKey: "diorama_setting_tool"),
+           let style = PickupToolStyle(rawValue: rawTool) {
+            pickupToolStyle = style
+        }
+        if let rawTheme = ud.string(forKey: "diorama_setting_tweezer_theme"),
+           let theme = TweezerTheme(rawValue: rawTheme) {
+            tweezerTheme = theme
+        }
+        if ud.object(forKey: "diorama_setting_peel") != nil {
+            enablePeelAnimation = ud.bool(forKey: "diorama_setting_peel")
         }
     }
 
@@ -136,7 +182,11 @@ final class DioramaGameViewModel: ObservableObject {
     func beginDrag(sticker: StickerDefinition, at globalPoint: CGPoint, freeInstanceId: UUID? = nil) {
         if activeDrag == nil {
             HapticManager.shared.stickerPickup()
-            SoundManager.shared.playPickup()
+            if enablePeelAnimation && freeInstanceId == nil {
+                SoundManager.shared.playPaperPeel()
+            } else {
+                SoundManager.shared.playPickup()
+            }
         }
         var state = ActiveDragState(sticker: sticker, globalLocation: globalPoint, isNearTarget: false, freeInstanceId: freeInstanceId)
         activeDrag = state

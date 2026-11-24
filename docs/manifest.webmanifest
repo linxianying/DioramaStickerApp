@@ -1,0 +1,18 @@
+{
+  "name": "微缩造景贴纸屋",
+  "short_name": "造景贴纸",
+  "description": "治愈系微缩手账造景贴纸游戏 · 6大主题 121 张贴纸",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#161a2e",
+  "theme_color": "#161a2e",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

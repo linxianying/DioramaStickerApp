@@ -5,6 +5,7 @@ struct MainGameView: View {
     @ObservedObject var viewModel: DioramaGameViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showResetConfirm = false
+    @State private var showSettings = false
 
     var body: some View {
         ZStack {
@@ -34,29 +35,42 @@ struct MainGameView: View {
             }
             .padding(.top, 4)
 
-            // Floating lifted sticker overlay during active drag
+            // Floating lifted sticker overlay during active drag (+ optional 3D peel & tweezers!)
             if let drag = viewModel.activeDrag,
                let img = LevelLoader.shared.loadImage(named: drag.sticker.file, folderName: viewModel.currentFolderName) {
                 let targetSize = floatingStickerSize(for: drag.sticker)
                 let offsetY = (drag.freeInstanceId == nil) ? viewModel.dragFingerOffsetY : 0
-                Image(uiImage: img)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: targetSize.width, height: targetSize.height)
-                    // Glossy die-cut white sticker rim + elevated peel shadow while dragging
-                    .shadow(color: .white.opacity(drag.isNearTarget ? 1.0 : 0.9), radius: 2.2)
-                    .shadow(color: drag.isNearTarget ? .yellow.opacity(0.75) : .black.opacity(0.45),
-                            radius: drag.isNearTarget ? 14 : 12,
-                            x: 0, y: 12)
-                    .scaleEffect(drag.isNearTarget ? 1.04 : 1.08)
-                    .rotationEffect(.degrees(drag.isNearTarget ? 0 : -4))
-                    .position(
-                        x: drag.globalLocation.x,
-                        y: drag.globalLocation.y + offsetY
-                    )
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
-                    .animation(.interactiveSpring(response: 0.18, dampingFraction: 0.72), value: drag.isNearTarget)
+
+                ZStack {
+                    Image(uiImage: img)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: targetSize.width, height: targetSize.height)
+                        .modifier(StickerPeelEffectModifier(enabled: viewModel.enablePeelAnimation && drag.freeInstanceId == nil))
+                        .shadow(color: .white.opacity(drag.isNearTarget ? 1.0 : 0.9), radius: 2.2)
+                        .shadow(color: drag.isNearTarget ? .yellow.opacity(0.75) : .black.opacity(0.45),
+                                radius: drag.isNearTarget ? 14 : 12,
+                                x: 0, y: 12)
+                        .scaleEffect(drag.isNearTarget ? 1.04 : 1.08)
+                        .rotationEffect(.degrees(drag.isNearTarget ? 0 : -4))
+
+                    if viewModel.pickupToolStyle == .tweezers {
+                        TweezerOverlayView(
+                            theme: viewModel.tweezerTheme,
+                            isPinching: true,
+                            isNearTarget: drag.isNearTarget
+                        )
+                        .offset(x: targetSize.width * 0.22 + 34, y: -targetSize.height * 0.18 - 34)
+                    }
+                }
+                .id(drag.sticker.id)
+                .position(
+                    x: drag.globalLocation.x,
+                    y: drag.globalLocation.y + offsetY
+                )
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .animation(.interactiveSpring(response: 0.18, dampingFraction: 0.72), value: drag.isNearTarget)
             }
 
             // Toast notification banner
@@ -84,6 +98,11 @@ struct MainGameView: View {
             if viewModel.showCompletionBanner {
                 completionOverlay
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsSheetView(viewModel: viewModel)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .confirmationDialog("确定要重置当前画布吗？", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button("重置", role: .destructive) {
@@ -165,7 +184,7 @@ struct MainGameView: View {
         .padding(.horizontal, 14)
     }
 
-    // MARK: - Utility Strip (Hints, Peek Reference, Zoom Reset, Sound, Reset)
+    // MARK: - Utility Strip (Hints, Peek Reference, Zoom Reset, Settings, Reset)
     private var actionStrip: some View {
         HStack(spacing: 8) {
             if viewModel.gameMode == .classic {
@@ -222,8 +241,9 @@ struct MainGameView: View {
                 }
             }
 
-            iconCircleButton(icon: viewModel.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill") {
-                viewModel.isMuted.toggle()
+            iconCircleButton(icon: "gearshape.fill") {
+                HapticManager.shared.magneticEnter()
+                showSettings = true
             }
 
             iconCircleButton(icon: "arrow.counterclockwise") {
