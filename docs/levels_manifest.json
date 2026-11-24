@@ -112,12 +112,12 @@
     },
     {
       "id": "hotpot_feast",
-      "title_zh": "火锅食材盛宴",
+      "title_zh": "火锅聚会盛宴",
       "title_en": "Overhead Hotpot Feast",
-      "subtitle_zh": "天花板俯视角鸳鸯火锅",
+      "subtitle_zh": "12人超长桌俯视火锅派对",
       "emoji": "🍲",
       "accentHex": "#DC2626",
-      "stickerCount": 22,
+      "stickerCount": 44,
       "thumb": "levels/hotpot_feast/thumb.webp",
       "dataUrl": "levels/hotpot_feast/level.json"
     },
@@ -131,6 +131,17 @@
       "stickerCount": 29,
       "thumb": "levels/taiwan_night_market/thumb.webp",
       "dataUrl": "levels/taiwan_night_market/level.json"
+    },
+    {
+      "id": "pearl_earring_studio",
+      "title_zh": "珍珠耳环画室",
+      "title_en": "Pearl Earring Studio",
+      "subtitle_zh": "维米尔的暖光荷兰画室",
+      "emoji": "🎨",
+      "accentHex": "#D4A359",
+      "stickerCount": 22,
+      "thumb": "levels/pearl_earring_studio/thumb.webp",
+      "dataUrl": "levels/pearl_earring_studio/level.json"
     }
   ]
 }

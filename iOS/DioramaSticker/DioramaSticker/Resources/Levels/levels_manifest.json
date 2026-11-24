@@ -104,9 +104,9 @@
       "id": "hotpot_feast",
       "folder": "hotpot_feast",
       "jsonFile": "level_hotpot_feast",
-      "title_zh": "火锅食材盛宴",
+      "title_zh": "火锅聚会盛宴",
       "title_en": "Overhead Hotpot Feast",
-      "subtitle_zh": "天花板俯视角鸳鸯火锅",
+      "subtitle_zh": "12人超长桌俯视火锅派对",
       "emoji": "🍲",
       "accentHex": "#DC2626"
     },
@@ -119,6 +119,16 @@
       "subtitle_zh": "珍珠奶茶、盐酥鸡与套圈圈",
       "emoji": "🏮",
       "accentHex": "#E11D48"
+    },
+    {
+      "id": "pearl_earring_studio",
+      "folder": "pearl_earring_studio",
+      "jsonFile": "level_pearl_earring_studio",
+      "title_zh": "珍珠耳环画室",
+      "title_en": "Pearl Earring Studio",
+      "subtitle_zh": "维米尔的暖光荷兰画室",
+      "emoji": "🎨",
+      "accentHex": "#D4A359"
     }
   ]
 }
