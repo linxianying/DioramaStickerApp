@@ -7,7 +7,7 @@
       "subtitle_zh": "星空帐篷与围炉夜话",
       "emoji": "🏕️",
       "accentHex": "#F59E0B",
-      "stickerCount": 30,
+      "stickerCount": 34,
       "thumb": "levels/campfire_party/thumb.webp",
       "dataUrl": "levels/campfire_party/level.json"
     },
@@ -18,7 +18,7 @@
       "subtitle_zh": "草莓蛋糕与软萌猫咪",
       "emoji": "🐱",
       "accentHex": "#F472B6",
-      "stickerCount": 20,
+      "stickerCount": 30,
       "thumb": "levels/cat_cafe/thumb.webp",
       "dataUrl": "levels/cat_cafe/level.json"
     },
@@ -29,7 +29,7 @@
       "subtitle_zh": "海浪烟花与章鱼烧摊",
       "emoji": "🎆",
       "accentHex": "#38BDF8",
-      "stickerCount": 22,
+      "stickerCount": 36,
       "thumb": "levels/summer_market/thumb.webp",
       "dataUrl": "levels/summer_market/level.json"
     },
