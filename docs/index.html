@@ -888,11 +888,11 @@
       <div class="gallery-header">
         <div>
           <h1 class="gallery-title">微缩造景贴纸屋</h1>
-          <p id="gallerySubtitle" class="gallery-sub">12 大治愈主题 · 共 265 张独立贴纸</p>
+          <p id="gallerySubtitle" class="gallery-sub">12 大治愈主题 · 共 299 张独立贴纸</p>
         </div>
         <div class="header-actions">
           <div class="stat-badge">
-            <div id="galleryTotalBadge" class="num">0/265</div>
+            <div id="galleryTotalBadge" class="num">0/299</div>
             <div class="lbl">已收集</div>
           </div>
           <button id="btnGallerySettings" class="circle-btn" title="手感与动画设置">⚙️</button>
@@ -1025,6 +1025,17 @@
               <button class="color-chip" data-theme="champagne"><span class="swatch" style="background:#f9d88e;"></span>奶油金</button>
               <button class="color-chip" data-theme="silver"><span class="swatch" style="background:#d6e0f0;"></span>极简银</button>
             </div>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-label">难度与底图影子</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div id="togShadowsTitle" class="ti-title">👻 底图轮廓影子（已开启）</div>
+              <div id="togShadowsSub" class="ti-sub">标准治愈模式：底图显示半透明轮廓影子；关闭后进入🔥无影高难挑战</div>
+            </div>
+            <button id="togShadows" class="switch on" aria-label="底图影子开关"></button>
           </div>
         </div>
 
@@ -1201,6 +1212,7 @@
     const settings = {
       tool: "tweezers",       // "tweezers" | "finger"
       tweezerTheme: "roseGold", // "roseGold" | "champagne" | "silver"
+      showShadows: true,      // true = standard with silhouette hints, false = hard no-shadow mode
       peelAnim: true,
       sound: true,
       haptics: true
@@ -1236,7 +1248,7 @@
       activeLevel: null,
       mode: "classic",
       category: "全部",
-      showOutlines: true,
+      showOutlines: settings.showShadows !== false,
       spotlightId: null,
       zoomLevels: [1.0, 1.5, 2.0],
       zoomIdx: 0,
@@ -1278,7 +1290,7 @@
       toastTimer = setTimeout(() => { toastEl.style.opacity = "0"; }, 2200);
     }
 
-    const ASSET_VER = "20261124c";
+    const ASSET_VER = "20261124d";
     function withAssetVer(url) {
       return url + (url.includes("?") ? "&" : "?") + "v=" + ASSET_VER;
     }
@@ -1486,7 +1498,11 @@
       document.getElementById("progressBar").style.width = `${(placed / total) * 100}%`;
       document.getElementById("progressText").textContent = `${placed}/${total}`;
       document.getElementById("freeCountText").textContent = curFreeItems().length;
-      document.getElementById("btnOutline").classList.toggle("active", state.showOutlines);
+      const btnOut = document.getElementById("btnOutline");
+      btnOut.classList.toggle("active", state.showOutlines);
+      btnOut.textContent = state.showOutlines ? "👻 影子开" : "🔥 无影挑战";
+      btnOut.style.borderColor = state.showOutlines ? "" : "rgba(255, 130, 82, 0.72)";
+      btnOut.style.color = state.showOutlines ? "" : "#ffad70";
     }
 
     function renderCategories() {
@@ -1798,7 +1814,9 @@
             setTimeout(() => {
               AudioSFX.complete();
               haptic([30, 50, 40]);
-              document.getElementById("completeTitleEl").textContent = `${state.activeMeta.title_zh}造景完成！`;
+              document.getElementById("completeTitleEl").textContent = state.showOutlines
+                ? `${state.activeMeta.title_zh}造景完成！`
+                : `🔥 无影大师通关 · ${state.activeMeta.title_zh}！`;
               completeModal.classList.remove("hidden");
             }, 350);
           }
@@ -1861,6 +1879,13 @@
       document.querySelectorAll(".color-chip").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.theme === settings.tweezerTheme);
       });
+      const shadowsOn = settings.showShadows !== false;
+      state.showOutlines = shadowsOn;
+      document.getElementById("togShadows").classList.toggle("on", shadowsOn);
+      document.getElementById("togShadowsTitle").textContent = shadowsOn ? "👻 底图轮廓影子（已开启）" : "🔥 无影大师挑战（已关闭影子）";
+      document.getElementById("togShadowsSub").textContent = shadowsOn
+        ? "标准治愈模式：底图显示半透明轮廓影子；关闭后进入🔥无影高难挑战"
+        : "高难挑战模式：已隐藏全部底图影子，靠空间观察与层层叠加盲贴！";
       document.getElementById("togPeel").classList.toggle("on", settings.peelAnim);
       document.getElementById("togSound").classList.toggle("on", settings.sound);
       document.getElementById("togHaptics").classList.toggle("on", settings.haptics);
@@ -1879,6 +1904,19 @@
     document.querySelectorAll(".color-chip").forEach(btn => {
       btn.addEventListener("click", () => { settings.tweezerTheme = btn.dataset.theme; saveSettings(); syncSettingsUI(); AudioSFX.tick(); });
     });
+    function toggleShadowHints() {
+      settings.showShadows = !(settings.showShadows !== false);
+      state.showOutlines = settings.showShadows;
+      saveSettings();
+      syncSettingsUI();
+      AudioSFX.tick();
+      if (state.activeLevel) {
+        renderHeader();
+        renderCanvas();
+      }
+      showToast(settings.showShadows ? "👻 已开启底图轮廓影子（标准模式）" : "🔥 已关闭底图影子：进入无影高难挑战！");
+    }
+    document.getElementById("togShadows").addEventListener("click", toggleShadowHints);
     document.getElementById("togPeel").addEventListener("click", () => { settings.peelAnim = !settings.peelAnim; saveSettings(); syncSettingsUI(); if (settings.peelAnim) AudioSFX.peel(); else AudioSFX.tick(); });
     document.getElementById("togSound").addEventListener("click", () => { settings.sound = !settings.sound; saveSettings(); syncSettingsUI(); if (settings.sound) AudioSFX.tick(); });
     document.getElementById("togHaptics").addEventListener("click", () => { settings.haptics = !settings.haptics; saveSettings(); syncSettingsUI(); haptic(16); });
@@ -1890,7 +1928,7 @@
       state.mode = "free"; AudioSFX.tick(); renderAll();
       if (curFreeItems().length === 0) showToast("自由模式：拖放任意贴纸，或点「载入官方图」DIY ✨");
     });
-    document.getElementById("btnOutline").addEventListener("click", () => { state.showOutlines = !state.showOutlines; AudioSFX.tick(); renderHeader(); renderCanvas(); });
+    document.getElementById("btnOutline").addEventListener("click", toggleShadowHints);
 
     const btnPeek = document.getElementById("btnPeek");
     const setPeek = (on) => { peekLayer.style.opacity = on ? "0.78" : "0"; btnPeek.classList.toggle("active", on); };

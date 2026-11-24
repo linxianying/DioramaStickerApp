@@ -12,7 +12,11 @@ final class DioramaGameViewModel: ObservableObject {
 
     // MARK: - Classic Puzzle State
     @Published var placedStickerIDs: Set<String> = []
-    @Published var showOutlineHints: Bool = true
+    @Published var showOutlineHints: Bool = true {
+        didSet {
+            UserDefaults.standard.set(showOutlineHints, forKey: "diorama_setting_show_shadows")
+        }
+    }
     @Published var isPeekingReference: Bool = false
     @Published var spotlightStickerID: String? = nil
     @Published var hasUnlockedFreeMode: Bool = false
@@ -90,6 +94,9 @@ final class DioramaGameViewModel: ObservableObject {
         }
         if ud.object(forKey: "diorama_setting_peel") != nil {
             enablePeelAnimation = ud.bool(forKey: "diorama_setting_peel")
+        }
+        if ud.object(forKey: "diorama_setting_show_shadows") != nil {
+            showOutlineHints = ud.bool(forKey: "diorama_setting_show_shadows")
         }
     }
 

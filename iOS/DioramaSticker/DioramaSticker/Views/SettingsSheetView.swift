@@ -85,7 +85,24 @@ struct SettingsSheetView: View {
                             }
                         }
 
-                        // Section 2: Animations & Sensory Feedback
+                        // Section 2: Difficulty & Shadow Hints (No-Shadow Hard Mode!)
+                        settingsCard(title: "难度与底图影子", icon: "flame.fill") {
+                            Toggle(isOn: $viewModel.showOutlineHints) {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(viewModel.showOutlineHints ? "👻 底图轮廓影子（已开启）" : "🔥 无影大师挑战（已关闭影子）")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(viewModel.showOutlineHints ? .white : Color(red: 1.0, green: 0.72, blue: 0.35))
+                                    Text(viewModel.showOutlineHints
+                                         ? "标准治愈模式：底图显示半透明轮廓影子提示位置"
+                                         : "高难挑战模式：隐藏全部底图影子，仅靠观察与空间感盲贴！")
+                                        .font(.system(size: 11.5))
+                                        .foregroundStyle(.white.opacity(0.68))
+                                }
+                            }
+                            .tint(Color(red: 1.0, green: 0.84, blue: 0.42))
+                        }
+
+                        // Section 3: Animations & Sensory Feedback
                         settingsCard(title: "动效与感官体验", icon: "sparkles") {
                             VStack(spacing: 14) {
                                 Toggle(isOn: $viewModel.enablePeelAnimation) {

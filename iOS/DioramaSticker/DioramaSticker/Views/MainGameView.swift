@@ -189,8 +189,8 @@ struct MainGameView: View {
         HStack(spacing: 8) {
             if viewModel.gameMode == .classic {
                 pillButton(
-                    icon: viewModel.showOutlineHints ? "eye.fill" : "eye.slash",
-                    title: "轮廓",
+                    icon: viewModel.showOutlineHints ? "eye.fill" : "flame.fill",
+                    title: viewModel.showOutlineHints ? "影子开" : "无影挑战",
                     active: viewModel.showOutlineHints
                 ) {
                     withAnimation(.easeInOut(duration: 0.2)) {

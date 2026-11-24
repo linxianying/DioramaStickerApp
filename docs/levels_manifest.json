@@ -40,7 +40,7 @@
       "subtitle_zh": "壁炉雪松与驯鹿雪橇",
       "emoji": "🎄",
       "accentHex": "#EF4444",
-      "stickerCount": 21,
+      "stickerCount": 25,
       "thumb": "levels/winter_cabin/thumb.webp",
       "dataUrl": "levels/winter_cabin/level.json"
     },
@@ -95,7 +95,7 @@
       "subtitle_zh": "极光森林与驯鹿雪橇",
       "emoji": "❄️",
       "accentHex": "#60A5FA",
-      "stickerCount": 21,
+      "stickerCount": 29,
       "thumb": "levels/christmas_forest/thumb.webp",
       "dataUrl": "levels/christmas_forest/level.json"
     },
@@ -106,7 +106,7 @@
       "subtitle_zh": "绿洲星夜与波西米亚帐篷",
       "emoji": "🐪",
       "accentHex": "#F97316",
-      "stickerCount": 18,
+      "stickerCount": 27,
       "thumb": "levels/desert_camp/thumb.webp",
       "dataUrl": "levels/desert_camp/level.json"
     },
@@ -117,7 +117,7 @@
       "subtitle_zh": "天花板俯视角鸳鸯火锅",
       "emoji": "🍲",
       "accentHex": "#DC2626",
-      "stickerCount": 19,
+      "stickerCount": 22,
       "thumb": "levels/hotpot_feast/thumb.webp",
       "dataUrl": "levels/hotpot_feast/level.json"
     },
@@ -128,7 +128,7 @@
       "subtitle_zh": "珍珠奶茶、盐酥鸡与套圈圈",
       "emoji": "🏮",
       "accentHex": "#E11D48",
-      "stickerCount": 19,
+      "stickerCount": 29,
       "thumb": "levels/taiwan_night_market/thumb.webp",
       "dataUrl": "levels/taiwan_night_market/level.json"
     }
