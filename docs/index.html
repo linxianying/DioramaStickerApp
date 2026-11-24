@@ -888,11 +888,11 @@
       <div class="gallery-header">
         <div>
           <h1 class="gallery-title">微缩造景贴纸屋</h1>
-          <p id="gallerySubtitle" class="gallery-sub">8 大治愈主题 · 共 151 张独立贴纸</p>
+          <p id="gallerySubtitle" class="gallery-sub">8 大治愈主题 · 共 188 张独立贴纸</p>
         </div>
         <div class="header-actions">
           <div class="stat-badge">
-            <div id="galleryTotalBadge" class="num">0/151</div>
+            <div id="galleryTotalBadge" class="num">0/188</div>
             <div class="lbl">已收集</div>
           </div>
           <button id="btnGallerySettings" class="circle-btn" title="手感与动画设置">⚙️</button>
@@ -1278,8 +1278,13 @@
       toastTimer = setTimeout(() => { toastEl.style.opacity = "0"; }, 2200);
     }
 
+    const ASSET_VER = "20261124b";
+    function withAssetVer(url) {
+      return url + (url.includes("?") ? "&" : "?") + "v=" + ASSET_VER;
+    }
+
     function stickerAssetUrl(levelId, file) {
-      return `levels/${levelId}/${file}`;
+      return withAssetVer(`levels/${levelId}/${file}`);
     }
 
     function curPlacedSet() { return new Set(ensureProgress(state.activeMeta.id).placedClassic); }
@@ -1289,7 +1294,7 @@
     // ==================== BOOTSTRAP ====================
     async function init() {
       syncSettingsUI();
-      const res = await fetch("levels_manifest.json");
+      const res = await fetch(withAssetVer("levels_manifest.json"));
       const data = await res.json();
       state.manifest = data.levels;
       renderGallery();
@@ -1311,7 +1316,7 @@
         card.className = "level-card" + (done ? " done" : "");
         card.innerHTML = `
           <div class="level-thumb-wrap">
-            <img src="${item.thumb}" alt="${item.title_zh}" loading="lazy" draggable="false" />
+            <img src="${withAssetVer(item.thumb)}" alt="${item.title_zh}" loading="lazy" draggable="false" />
             <span class="level-pill ${done ? "done" : ""}">${done ? "已通关 ✓" : placed + "/" + total}</span>
           </div>
           <div class="level-info">
@@ -1351,11 +1356,20 @@
 
       let lvl = state.levelCache.get(meta.id);
       if (!lvl) {
-        const res = await fetch(meta.dataUrl);
+        const res = await fetch(withAssetVer(meta.dataUrl));
         lvl = await res.json();
         state.levelCache.set(meta.id, lvl);
       }
       state.activeLevel = lvl;
+
+      // Sanitize saved progress in case sticker IDs were updated across versions
+      const validIds = new Set(lvl.stickers.map(s => s.id));
+      const prog = ensureProgress(meta.id);
+      const filtered = prog.placedClassic.filter(id => validIds.has(id));
+      if (filtered.length !== prog.placedClassic.length) {
+        prog.placedClassic = filtered;
+        saveProgress();
+      }
 
       // Preload background image before hiding loader
       await new Promise((resolve) => {

@@ -16,7 +16,7 @@
       "title_zh": "猫咖甜品店",
       "subtitle_zh": "草莓蛋糕与软萌猫咪",
       "accentHex": "#FF9EB5",
-      "stickerCount": 16,
+      "stickerCount": 20,
       "thumb": "levels/cat_cafe/thumb.webp",
       "dataUrl": "levels/cat_cafe/level.json"
     },
@@ -46,7 +46,7 @@
       "title_zh": "贝果铺货小店",
       "subtitle_zh": "新鲜贝果补货与奶酪香",
       "accentHex": "#FFB86C",
-      "stickerCount": 16,
+      "stickerCount": 24,
       "thumb": "levels/bagel_shop/thumb.webp",
       "dataUrl": "levels/bagel_shop/level.json"
     },
@@ -56,7 +56,7 @@
       "title_zh": "法式面包烘焙店",
       "subtitle_zh": "窑炉欧包与酥脆可颂",
       "accentHex": "#F5B971",
-      "stickerCount": 16,
+      "stickerCount": 24,
       "thumb": "levels/bakery_shop/thumb.webp",
       "dataUrl": "levels/bakery_shop/level.json"
     },
@@ -66,7 +66,7 @@
       "title_zh": "吐司面包屋",
       "subtitle_zh": "厚切生吐司与蜂蜜黄油",
       "accentHex": "#FFE07D",
-      "stickerCount": 14,
+      "stickerCount": 22,
       "thumb": "levels/toast_shop/thumb.webp",
       "dataUrl": "levels/toast_shop/level.json"
     },
@@ -76,7 +76,7 @@
       "title_zh": "治愈缝纫小店",
       "subtitle_zh": "复古缝纫机与布艺手作",
       "accentHex": "#C8A6FF",
-      "stickerCount": 16,
+      "stickerCount": 25,
       "thumb": "levels/sewing_shop/thumb.webp",
       "dataUrl": "levels/sewing_shop/level.json"
     }
