@@ -1,0 +1,27 @@
+# macOS & Xcode
+.DS_Store
+*.xcuserdatad/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Python caches
+__pycache__/
+*.pyc
+.venv/
+
+# Intermediate asset pipeline debug outputs (final assets live in iOS/.../Resources/Levels/)
+assets_pipeline/extracted/
+assets_pipeline/extracted_*/
+assets_pipeline/grid_*.png
+assets_pipeline/diff_*.png
+assets_pipeline/blend_*.png
+assets_pipeline/outline_*.png
+assets_pipeline/sheet_*.png
+assets_pipeline/verify_*.png
+assets_pipeline/sticker_sheet_preview.png
+assets_pipeline/composite_verify.png

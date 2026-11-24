@@ -1,0 +1,40 @@
+{
+  "levels": [
+    {
+      "id": "campfire_party",
+      "folder": "campfire_party",
+      "jsonFile": "level_campfire",
+      "emoji": "🏕️",
+      "title_zh": "森林篝火晚会",
+      "subtitle_zh": "星空萤火与露营好友",
+      "accentHex": "#FFD86B"
+    },
+    {
+      "id": "cat_cafe",
+      "folder": "cat_cafe",
+      "jsonFile": "level_cat_cafe",
+      "emoji": "🐱",
+      "title_zh": "猫咖甜品店",
+      "subtitle_zh": "草莓蛋糕与软萌猫咪",
+      "accentHex": "#FF9EB5"
+    },
+    {
+      "id": "summer_market",
+      "folder": "summer_market",
+      "jsonFile": "level_summer_market",
+      "emoji": "🎆",
+      "title_zh": "海边夏日夜市",
+      "subtitle_zh": "烟花海风与美食摊位",
+      "accentHex": "#6CE0FF"
+    },
+    {
+      "id": "winter_cabin",
+      "folder": "winter_cabin",
+      "jsonFile": "level_winter_cabin",
+      "emoji": "🎄",
+      "title_zh": "冬日圣诞小屋",
+      "subtitle_zh": "壁炉暖光与雪地派对",
+      "accentHex": "#FF8080"
+    }
+  ]
+}
